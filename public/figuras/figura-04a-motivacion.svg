@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="662" height="610" viewBox="-1 -1 662 610" font-family="Arial, Helvetica, sans-serif" font-size="13px" fill="#111">
+<defs>
+<marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#333" stroke-width="1.3"/></marker>
+<marker id="hollow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#fff" stroke="#333"/></marker>
+<marker id="filled" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#333"/></marker>
+<marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7"><circle cx="5" cy="5" r="4" fill="#333"/></marker>
+</defs>
+<rect x="-1" y="-1" width="662" height="610" fill="#fff"/>
+<path d="M0 20 V0 H144.96000000000004 V20" fill="#f4f4f4" stroke="#777" stroke-dasharray="5 3"/><rect x="0" y="20" width="660" height="96" fill="none" stroke="#777" stroke-dasharray="5 3"/>
+<text x="8" y="15" font-weight="bold">Controladores (Driver)</text>
+<path d="M0 152 V132 H191.63000000000005 V152" fill="#f4f4f4" stroke="#777" stroke-dasharray="5 3"/><rect x="0" y="152" width="660" height="84" fill="none" stroke="#777" stroke-dasharray="5 3"/>
+<text x="8" y="147" font-weight="bold">Metas con su indicador (Goal)</text>
+<path d="M0 272 V252 H228.42000000000004 V272" fill="#f4f4f4" stroke="#777" stroke-dasharray="5 3"/><rect x="0" y="272" width="660" height="336" fill="none" stroke="#777" stroke-dasharray="5 3"/>
+<text x="8" y="267" font-weight="bold">Principios de arquitectura (Principle)</text>
+<polyline points="58.5,108.0 58.5,162.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="165.5,108.0 165.5,162.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="198.6,108.0 244.5,162.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="272.5,108.0 272.5,162.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="379.5,108.0 379.5,162.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="486.5,108.0 486.5,162.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="593.5,108.0 593.5,162.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="133.0,318.0 124.0,318.0 124.0,228.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="240.0,318.0 231.0,318.0 231.0,228.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="454.0,318.0 445.0,318.0 445.0,228.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="133.0,398.0 124.0,398.0 124.0,228.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="240.0,398.0 231.0,398.0 231.0,228.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="240.0,478.0 231.0,478.0 231.0,228.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="454.0,398.0 445.0,398.0 445.0,228.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<polyline points="240.0,558.0 231.0,558.0 231.0,228.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#open)" />
+<path d="M17 30 H100 L109 39 V99 L100 108 H17 L8 99 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="96" cy="42" r="6" fill="none" stroke="#333"/><circle cx="96" cy="42" r="1.6" fill="#333"/><line x1="87" y1="42" x2="105" y2="42" stroke="#333"/><line x1="89.63603896932108" y1="35.63603896932107" x2="102.36396103067892" y2="48.36396103067893" stroke="#333"/><line x1="96" y1="33" x2="96" y2="51" stroke="#333"/><line x1="102.36396103067892" y1="35.63603896932107" x2="89.63603896932108" y2="48.36396103067893" stroke="#333"/>
+<text x="58.5" y="65.3" text-anchor="middle">D1</text>
+<text x="58.5" y="80.7" text-anchor="middle">Competencia</text>
+<text x="58.5" y="96.0" text-anchor="middle">de bajo costo</text>
+<path d="M124 30 H207 L216 39 V99 L207 108 H124 L115 99 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="203" cy="42" r="6" fill="none" stroke="#333"/><circle cx="203" cy="42" r="1.6" fill="#333"/><line x1="194" y1="42" x2="212" y2="42" stroke="#333"/><line x1="196.63603896932108" y1="35.63603896932107" x2="209.36396103067892" y2="48.36396103067893" stroke="#333"/><line x1="203" y1="33" x2="203" y2="51" stroke="#333"/><line x1="209.36396103067892" y1="35.63603896932107" x2="196.63603896932108" y2="48.36396103067893" stroke="#333"/>
+<text x="165.5" y="57.7" text-anchor="middle">D2 37-38</text>
+<text x="165.5" y="73.0" text-anchor="middle">millones de</text>
+<text x="165.5" y="88.3" text-anchor="middle">pasajeros al</text>
+<text x="165.5" y="103.7" text-anchor="middle">año</text>
+<path d="M231 30 H314 L323 39 V99 L314 108 H231 L222 99 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="310" cy="42" r="6" fill="none" stroke="#333"/><circle cx="310" cy="42" r="1.6" fill="#333"/><line x1="301" y1="42" x2="319" y2="42" stroke="#333"/><line x1="303.6360389693211" y1="35.63603896932107" x2="316.3639610306789" y2="48.36396103067893" stroke="#333"/><line x1="310" y1="33" x2="310" y2="51" stroke="#333"/><line x1="316.3639610306789" y1="35.63603896932107" x2="303.6360389693211" y2="48.36396103067893" stroke="#333"/>
+<text x="272.5" y="57.7" text-anchor="middle">D3 Operación</text>
+<text x="272.5" y="73.0" text-anchor="middle">en varios</text>
+<text x="272.5" y="88.3" text-anchor="middle">países y</text>
+<text x="272.5" y="103.7" text-anchor="middle">husos</text>
+<path d="M338 30 H421 L430 39 V99 L421 108 H338 L329 99 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="417" cy="42" r="6" fill="none" stroke="#333"/><circle cx="417" cy="42" r="1.6" fill="#333"/><line x1="408" y1="42" x2="426" y2="42" stroke="#333"/><line x1="410.6360389693211" y1="35.63603896932107" x2="423.3639610306789" y2="48.36396103067893" stroke="#333"/><line x1="417" y1="33" x2="417" y2="51" stroke="#333"/><line x1="423.3639610306789" y1="35.63603896932107" x2="410.6360389693211" y2="48.36396103067893" stroke="#333"/>
+<text x="379.5" y="65.3" text-anchor="middle">D4 EDIFACT y</text>
+<text x="379.5" y="80.7" text-anchor="middle">NDC en los</text>
+<text x="379.5" y="96.0" text-anchor="middle">GDS</text>
+<path d="M445 30 H528 L537 39 V99 L528 108 H445 L436 99 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="524" cy="42" r="6" fill="none" stroke="#333"/><circle cx="524" cy="42" r="1.6" fill="#333"/><line x1="515" y1="42" x2="533" y2="42" stroke="#333"/><line x1="517.636038969321" y1="35.63603896932107" x2="530.363961030679" y2="48.36396103067893" stroke="#333"/><line x1="524" y1="33" x2="524" y2="51" stroke="#333"/><line x1="530.363961030679" y1="35.63603896932107" x2="517.636038969321" y2="48.36396103067893" stroke="#333"/>
+<text x="486.5" y="65.3" text-anchor="middle">D5 Protección</text>
+<text x="486.5" y="80.7" text-anchor="middle">de datos y</text>
+<text x="486.5" y="96.0" text-anchor="middle">PCI-DSS</text>
+<path d="M552 30 H635 L644 39 V99 L635 108 H552 L543 99 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="631" cy="42" r="6" fill="none" stroke="#333"/><circle cx="631" cy="42" r="1.6" fill="#333"/><line x1="622" y1="42" x2="640" y2="42" stroke="#333"/><line x1="624.636038969321" y1="35.63603896932107" x2="637.363961030679" y2="48.36396103067893" stroke="#333"/><line x1="631" y1="33" x2="631" y2="51" stroke="#333"/><line x1="637.363961030679" y1="35.63603896932107" x2="624.636038969321" y2="48.36396103067893" stroke="#333"/>
+<text x="593.5" y="57.7" text-anchor="middle">D6 16</text>
+<text x="593.5" y="73.0" text-anchor="middle">millones de</text>
+<text x="593.5" y="88.3" text-anchor="middle">socios</text>
+<text x="593.5" y="103.7" text-anchor="middle">LifeMiles</text>
+<path d="M17 162 H100 L109 171 V219 L100 228 H17 L8 219 V171 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="96" cy="174" r="7" fill="none" stroke="#333"/><circle cx="96" cy="174" r="4.2" fill="none" stroke="#333"/><circle cx="96" cy="174" r="1.5" fill="#333"/>
+<text x="58.5" y="199.0" text-anchor="middle">M1 Ingreso</text>
+<text x="58.5" y="214.4" text-anchor="middle">por asiento</text>
+<path d="M124 162 H207 L216 171 V219 L207 228 H124 L115 219 V171 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="203" cy="174" r="7" fill="none" stroke="#333"/><circle cx="203" cy="174" r="4.2" fill="none" stroke="#333"/><circle cx="203" cy="174" r="1.5" fill="#333"/>
+<text x="165.5" y="199.0" text-anchor="middle">M2 Sin doble</text>
+<text x="165.5" y="214.4" text-anchor="middle">asignación</text>
+<path d="M231 162 H314 L323 171 V219 L314 228 H231 L222 219 V171 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="310" cy="174" r="7" fill="none" stroke="#333"/><circle cx="310" cy="174" r="4.2" fill="none" stroke="#333"/><circle cx="310" cy="174" r="1.5" fill="#333"/>
+<text x="272.5" y="199.0" text-anchor="middle">M3 Venta</text>
+<text x="272.5" y="214.4" text-anchor="middle">24/7 en picos</text>
+<path d="M338 162 H421 L430 171 V219 L421 228 H338 L329 219 V171 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="417" cy="174" r="7" fill="none" stroke="#333"/><circle cx="417" cy="174" r="4.2" fill="none" stroke="#333"/><circle cx="417" cy="174" r="1.5" fill="#333"/>
+<text x="379.5" y="191.3" text-anchor="middle">M4</text>
+<text x="379.5" y="206.7" text-anchor="middle">Estándares del</text>
+<text x="379.5" y="222.0" text-anchor="middle">sector</text>
+<path d="M445 162 H528 L537 171 V219 L528 228 H445 L436 219 V171 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="524" cy="174" r="7" fill="none" stroke="#333"/><circle cx="524" cy="174" r="4.2" fill="none" stroke="#333"/><circle cx="524" cy="174" r="1.5" fill="#333"/>
+<text x="486.5" y="199.0" text-anchor="middle">M5 Datos y</text>
+<text x="486.5" y="214.4" text-anchor="middle">pagos seguros</text>
+<path d="M552 162 H635 L644 171 V219 L635 228 H552 L543 219 V171 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="631" cy="174" r="7" fill="none" stroke="#333"/><circle cx="631" cy="174" r="4.2" fill="none" stroke="#333"/><circle cx="631" cy="174" r="1.5" fill="#333"/>
+<text x="593.5" y="199.0" text-anchor="middle">M6 Fidelizar</text>
+<text x="593.5" y="214.4" text-anchor="middle">con millas</text>
+<path d="M35 282 H100 L109 291 V345 L100 354 H35 L26 345 V291 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="90" y="287" width="12" height="14" fill="none" stroke="#333"/><text x="96" y="298.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="67.5" y="306.7" text-anchor="middle">P8</text>
+<text x="67.5" y="322.0" text-anchor="middle">Decisión</text>
+<text x="67.5" y="337.4" text-anchor="middle">trazada a</text>
+<text x="67.5" y="352.7" text-anchor="middle">una meta</text>
+<path d="M142 282 H207 L216 291 V345 L207 354 H142 L133 345 V291 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="197" y="287" width="12" height="14" fill="none" stroke="#333"/><text x="203" y="298.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="174.5" y="306.7" text-anchor="middle">P1 Un</text>
+<text x="174.5" y="322.0" text-anchor="middle">asiento,</text>
+<text x="174.5" y="337.4" text-anchor="middle">una sola</text>
+<text x="174.5" y="352.7" text-anchor="middle">verdad</text>
+<path d="M142 362 H207 L216 371 V425 L207 434 H142 L133 425 V371 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="197" y="367" width="12" height="14" fill="none" stroke="#333"/><text x="203" y="378.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="174.5" y="394.3" text-anchor="middle">P4 Operar</text>
+<text x="174.5" y="409.7" text-anchor="middle">sin duplicar</text>
+<text x="174.5" y="425.0" text-anchor="middle">efectos</text>
+<path d="M249 282 H314 L323 291 V345 L314 354 H249 L240 345 V291 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="304" y="287" width="12" height="14" fill="none" stroke="#333"/><text x="310" y="298.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="281.5" y="306.7" text-anchor="middle">P2 Cada</text>
+<text x="281.5" y="322.0" text-anchor="middle">servicio,</text>
+<text x="281.5" y="337.4" text-anchor="middle">dueño de</text>
+<text x="281.5" y="352.7" text-anchor="middle">sus datos</text>
+<path d="M249 362 H314 L323 371 V425 L314 434 H249 L240 425 V371 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="304" y="367" width="12" height="14" fill="none" stroke="#333"/><text x="310" y="378.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="281.5" y="386.7" text-anchor="middle">P5</text>
+<text x="281.5" y="402.0" text-anchor="middle">Degradar</text>
+<text x="281.5" y="417.4" text-anchor="middle">antes que</text>
+<text x="281.5" y="432.7" text-anchor="middle">caer</text>
+<path d="M249 442 H314 L323 451 V505 L314 514 H249 L240 505 V451 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="304" y="447" width="12" height="14" fill="none" stroke="#333"/><text x="310" y="458.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="281.5" y="474.3" text-anchor="middle">P6 Nube de</text>
+<text x="281.5" y="489.7" text-anchor="middle">AWS antes</text>
+<text x="281.5" y="505.0" text-anchor="middle">que propia</text>
+<path d="M249 522 H314 L323 531 V585 L314 594 H249 L240 585 V531 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="304" y="527" width="12" height="14" fill="none" stroke="#333"/><text x="310" y="538.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="281.5" y="554.3" text-anchor="middle">P9 Solo</text>
+<text x="281.5" y="569.7" text-anchor="middle">mensajes</text>
+<text x="281.5" y="585.0" text-anchor="middle">por Kafka</text>
+<path d="M463 282 H528 L537 291 V345 L528 354 H463 L454 345 V291 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="518" y="287" width="12" height="14" fill="none" stroke="#333"/><text x="524" y="298.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="495.5" y="314.3" text-anchor="middle">P3 Cada</text>
+<text x="495.5" y="329.7" text-anchor="middle">cambio, un</text>
+<text x="495.5" y="345.0" text-anchor="middle">evento</text>
+<path d="M463 362 H528 L537 371 V425 L528 434 H463 L454 425 V371 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<rect x="518" y="367" width="12" height="14" fill="none" stroke="#333"/><text x="524" y="378.5" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+<text x="495.5" y="394.3" text-anchor="middle">P7</text>
+<text x="495.5" y="409.7" text-anchor="middle">Seguridad</text>
+<text x="495.5" y="425.0" text-anchor="middle">por defecto</text>
+</svg>

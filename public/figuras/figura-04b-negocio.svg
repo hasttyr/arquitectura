@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="662" height="684" viewBox="-1 -1 662 684" font-family="Arial, Helvetica, sans-serif" font-size="13px" fill="#111">
+<defs>
+<marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#333" stroke-width="1.3"/></marker>
+<marker id="hollow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#fff" stroke="#333"/></marker>
+<marker id="filled" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#333"/></marker>
+<marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7"><circle cx="5" cy="5" r="4" fill="#333"/></marker>
+</defs>
+<rect x="-1" y="-1" width="662" height="684" fill="#fff"/>
+<path d="M0 20 V0 H90.62000000000002 V20" fill="#f4f4f4" stroke="#777" stroke-dasharray="5 3"/><rect x="0" y="20" width="660" height="82" fill="none" stroke="#777" stroke-dasharray="5 3"/>
+<text x="8" y="15" font-weight="bold">Metas (Goal)</text>
+<path d="M0 138 V118 H255.59 V138" fill="#f4f4f4" stroke="#777" stroke-dasharray="5 3"/><rect x="0" y="138" width="660" height="64" fill="none" stroke="#777" stroke-dasharray="5 3"/>
+<text x="8" y="133" font-weight="bold">Servicios de negocio (Business Service)</text>
+<path d="M0 238 V218 H305.11999999999995 V238" fill="#f4f4f4" stroke="#777" stroke-dasharray="5 3"/><rect x="0" y="238" width="660" height="78" fill="none" stroke="#777" stroke-dasharray="5 3"/>
+<text x="8" y="233" font-weight="bold">Procesos dentro del alcance (Business Process)</text>
+<path d="M0 352 V332 H146.65000000000006 V352" fill="#f4f4f4" stroke="#777" stroke-dasharray="5 3"/><rect x="0" y="352" width="660" height="222" fill="none" stroke="#777" stroke-dasharray="5 3"/>
+<text x="8" y="347" font-weight="bold">Roles (Business Role)</text>
+<path d="M0 610 V590 H306.6799999999999 V610" fill="#f4f4f4" stroke="#777" stroke-dasharray="5 3"/><rect x="0" y="610" width="660" height="72" fill="none" stroke="#777" stroke-dasharray="5 3"/>
+<text x="8" y="605" font-weight="bold">Procesos de sistemas vecinos, fuera del alcance</text>
+<polyline points="172.4,146.0 101.9,94.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="165.5,146.0 205.0,94.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="272.5,146.0 252.5,94.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="243.8,146.0 329.0,93.3" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="267.6,146.0 436.0,81.4" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="593.5,146.0 567.3,94.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="125.6,248.0 95.0,194.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="205.0,248.0 255.0,194.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="356.7,248.0 251.7,194.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="505.0,248.0 575.0,194.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="2 3" marker-end="url(#hollow)" />
+<polyline points="170.0,278.0 180.0,278.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" />
+<polyline points="180.0,290.0 175.0,290.0 175.0,636.0 180.0,636.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#filled)" />
+<polyline points="20.0,647.0 11.0,647.0 11.0,278.0 20.0,278.0" fill="none" stroke="#333" stroke-width="1.1" stroke-dasharray="6 4" marker-end="url(#filled)" />
+<polyline points="330.0,647.0 340.0,647.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" />
+<polyline points="500.0,375.0 170.0,296.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" marker-start="url(#dot)"/>
+<polyline points="531.9,362.0 456.7,308.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" marker-start="url(#dot)"/>
+<polyline points="575.0,362.0 575.0,308.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" marker-start="url(#dot)"/>
+<polyline points="340.0,366.0 170.0,305.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" marker-start="url(#dot)"/>
+<polyline points="415.0,362.0 415.0,308.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" marker-start="url(#dot)"/>
+<polyline points="95.0,362.0 95.0,308.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" marker-start="url(#dot)"/>
+<polyline points="255.0,424.0 255.0,620.0" fill="none" stroke="#333" stroke-width="1.1"  marker-end="url(#filled)" marker-start="url(#dot)"/>
+<path d="M17 30 H100 L109 39 V85 L100 94 H17 L8 85 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="96" cy="42" r="7" fill="none" stroke="#333"/><circle cx="96" cy="42" r="4.2" fill="none" stroke="#333"/><circle cx="96" cy="42" r="1.5" fill="#333"/>
+<text x="58.5" y="66.0" text-anchor="middle">M1 Ingreso</text>
+<text x="58.5" y="81.3" text-anchor="middle">por asiento</text>
+<path d="M124 30 H207 L216 39 V85 L207 94 H124 L115 85 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="203" cy="42" r="7" fill="none" stroke="#333"/><circle cx="203" cy="42" r="4.2" fill="none" stroke="#333"/><circle cx="203" cy="42" r="1.5" fill="#333"/>
+<text x="165.5" y="66.0" text-anchor="middle">M2 Sin doble</text>
+<text x="165.5" y="81.3" text-anchor="middle">asignación</text>
+<path d="M231 30 H314 L323 39 V85 L314 94 H231 L222 85 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="310" cy="42" r="7" fill="none" stroke="#333"/><circle cx="310" cy="42" r="4.2" fill="none" stroke="#333"/><circle cx="310" cy="42" r="1.5" fill="#333"/>
+<text x="272.5" y="66.0" text-anchor="middle">M3 Venta</text>
+<text x="272.5" y="81.3" text-anchor="middle">24/7 en picos</text>
+<path d="M338 30 H421 L430 39 V85 L421 94 H338 L329 85 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="417" cy="42" r="7" fill="none" stroke="#333"/><circle cx="417" cy="42" r="4.2" fill="none" stroke="#333"/><circle cx="417" cy="42" r="1.5" fill="#333"/>
+<text x="379.5" y="58.3" text-anchor="middle">M4</text>
+<text x="379.5" y="73.7" text-anchor="middle">Estándares del</text>
+<text x="379.5" y="89.0" text-anchor="middle">sector</text>
+<path d="M445 30 H528 L537 39 V85 L528 94 H445 L436 85 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="524" cy="42" r="7" fill="none" stroke="#333"/><circle cx="524" cy="42" r="4.2" fill="none" stroke="#333"/><circle cx="524" cy="42" r="1.5" fill="#333"/>
+<text x="486.5" y="66.0" text-anchor="middle">M5 Datos y</text>
+<text x="486.5" y="81.3" text-anchor="middle">pagos seguros</text>
+<path d="M552 30 H635 L644 39 V85 L635 94 H552 L543 85 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
+<circle cx="631" cy="42" r="7" fill="none" stroke="#333"/><circle cx="631" cy="42" r="4.2" fill="none" stroke="#333"/><circle cx="631" cy="42" r="1.5" fill="#333"/>
+<text x="593.5" y="66.0" text-anchor="middle">M6 Fidelizar</text>
+<text x="593.5" y="81.3" text-anchor="middle">con millas</text>
+<rect x="90" y="146" width="230" height="48" rx="24" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<text x="205" y="174.7" text-anchor="middle">Venta y distribución de tiquetes</text>
+<rect x="400" y="146" width="210" height="48" rx="24" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<text x="505" y="174.7" text-anchor="middle">Fidelización LifeMiles</text>
+<rect x="20" y="248" width="150" height="60" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M148 257 H159 V253 L166 260 L159 267 V263 H148 Z" fill="none" stroke="#333"/>
+<text x="95" y="289.7" text-anchor="middle">Reservar tiquete</text>
+<rect x="180" y="248" width="150" height="60" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M308 257 H319 V253 L326 260 L319 267 V263 H308 Z" fill="none" stroke="#333"/>
+<text x="255" y="289.7" text-anchor="middle">Emitir tiquete</text>
+<rect x="340" y="248" width="150" height="60" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M468 257 H479 V253 L486 260 L479 267 V263 H468 Z" fill="none" stroke="#333"/>
+<text x="415" y="274.3" text-anchor="middle">Postventa: cambios,</text>
+<text x="415" y="289.7" text-anchor="middle">cancelaciones y</text>
+<text x="415" y="305.0" text-anchor="middle">reembolsos</text>
+<rect x="500" y="248" width="150" height="60" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M628 257 H639 V253 L646 260 L639 267 V263 H628 Z" fill="none" stroke="#333"/>
+<text x="575" y="282.0" text-anchor="middle">Gestionar millas</text>
+<text x="575" y="297.3" text-anchor="middle">LifeMiles</text>
+<rect x="20" y="362" width="150" height="62" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M151 369 H162" stroke="#333"/><path d="M151 379 H162" stroke="#333"/><ellipse cx="151" cy="374" rx="3" ry="5" fill="none" stroke="#333"/><ellipse cx="162" cy="374" rx="3" ry="5" fill="none" stroke="#333"/>
+<text x="95" y="404.7" text-anchor="middle">Socios interline o GDS</text>
+<rect x="180" y="362" width="150" height="62" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M311 369 H322" stroke="#333"/><path d="M311 379 H322" stroke="#333"/><ellipse cx="311" cy="374" rx="3" ry="5" fill="none" stroke="#333"/><ellipse cx="322" cy="374" rx="3" ry="5" fill="none" stroke="#333"/>
+<text x="255" y="397.0" text-anchor="middle">Personal de check-in o</text>
+<text x="255" y="412.3" text-anchor="middle">embarque</text>
+<rect x="340" y="362" width="150" height="62" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M471 369 H482" stroke="#333"/><path d="M471 379 H482" stroke="#333"/><ellipse cx="471" cy="374" rx="3" ry="5" fill="none" stroke="#333"/><ellipse cx="482" cy="374" rx="3" ry="5" fill="none" stroke="#333"/>
+<text x="415" y="397.0" text-anchor="middle">Agente de aerolínea o</text>
+<text x="415" y="412.3" text-anchor="middle">call center</text>
+<rect x="500" y="362" width="150" height="62" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M631 369 H642" stroke="#333"/><path d="M631 379 H642" stroke="#333"/><ellipse cx="631" cy="374" rx="3" ry="5" fill="none" stroke="#333"/><ellipse cx="642" cy="374" rx="3" ry="5" fill="none" stroke="#333"/>
+<text x="575" y="404.7" text-anchor="middle">Pasajero o cliente</text>
+<rect x="340" y="432" width="150" height="62" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M471 439 H482" stroke="#333"/><path d="M471 449 H482" stroke="#333"/><ellipse cx="471" cy="444" rx="3" ry="5" fill="none" stroke="#333"/><ellipse cx="482" cy="444" rx="3" ry="5" fill="none" stroke="#333"/>
+<text x="415" y="467.0" text-anchor="middle">Administrador de</text>
+<text x="415" y="482.3" text-anchor="middle">sistemas o TI</text>
+<rect x="500" y="432" width="150" height="62" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M631 439 H642" stroke="#333"/><path d="M631 449 H642" stroke="#333"/><ellipse cx="631" cy="444" rx="3" ry="5" fill="none" stroke="#333"/><ellipse cx="642" cy="444" rx="3" ry="5" fill="none" stroke="#333"/>
+<text x="575" y="474.7" text-anchor="middle">Gerencia comercial</text>
+<rect x="340" y="502" width="150" height="62" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M471 509 H482" stroke="#333"/><path d="M471 519 H482" stroke="#333"/><ellipse cx="471" cy="514" rx="3" ry="5" fill="none" stroke="#333"/><ellipse cx="482" cy="514" rx="3" ry="5" fill="none" stroke="#333"/>
+<text x="415" y="544.7" text-anchor="middle">Equipo de desarrollo</text>
+<rect x="500" y="502" width="150" height="62" rx="7" fill="rgb(255,255,181)" stroke="#5c5c5c"/>
+<path d="M631 509 H642" stroke="#333"/><path d="M631 519 H642" stroke="#333"/><ellipse cx="631" cy="514" rx="3" ry="5" fill="none" stroke="#333"/><ellipse cx="642" cy="514" rx="3" ry="5" fill="none" stroke="#333"/>
+<text x="575" y="537.0" text-anchor="middle">Cumplimiento o</text>
+<text x="575" y="552.4" text-anchor="middle">auditoría</text>
+<rect x="20" y="620" width="150" height="54" rx="7" fill="rgb(224,224,224)" stroke="#5c5c5c"/>
+<path d="M148 629 H159 V625 L166 632 L159 639 V635 H148 Z" fill="none" stroke="#333"/>
+<text x="95" y="658.7" text-anchor="middle">Operación del vuelo</text>
+<rect x="180" y="620" width="150" height="54" rx="7" fill="rgb(224,224,224)" stroke="#5c5c5c"/>
+<path d="M308 629 H319 V625 L326 632 L319 639 V635 H308 Z" fill="none" stroke="#333"/>
+<text x="255" y="658.7" text-anchor="middle">Check-in</text>
+<rect x="340" y="620" width="150" height="54" rx="7" fill="rgb(224,224,224)" stroke="#5c5c5c"/>
+<path d="M468 629 H479 V625 L486 632 L479 639 V635 H468 Z" fill="none" stroke="#333"/>
+<text x="415" y="658.7" text-anchor="middle">Embarque</text>
+<rect x="500" y="620" width="150" height="54" rx="7" fill="rgb(224,224,224)" stroke="#5c5c5c"/>
+<path d="M628 629 H639 V625 L646 632 L639 639 V635 H628 Z" fill="none" stroke="#333"/>
+<text x="575" y="658.7" text-anchor="middle">Equipaje</text>
+<text x="177" y="467" font-size="12px" font-style="italic" fill="#333" stroke="#fff" stroke-width="4" paint-order="stroke">estado del tiquete</text>
+<text x="13" y="466.5" font-size="12px" font-style="italic" fill="#333" stroke="#fff" stroke-width="4" paint-order="stroke">programación y capacidad</text>
+</svg>
