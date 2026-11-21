@@ -14,19 +14,21 @@ export const SECCIONES = [
   { n: 10, code: '10', t: 'Trazabilidad y gobernanza' },
   { n: 11, code: '11', t: 'Punto de vista de desarrollo' },
   { n: 12, code: '12', t: 'Punto de vista operacional' },
-  { n: 13, code: '13', t: 'Perspectivas' },
-  { n: 14, code: '14', t: 'Supuestos y cierre' },
+  { n: 13, code: '13', t: 'Seguridad y desempeño' },
+  { n: 14, code: '14', t: 'Disponibilidad y evolución' },
+  { n: 15, code: 'FIN', t: 'Glosario y cierre' },
 ];
 
 const ESTADO_SEC = {
   1: 'A TIEMPO', 2: 'A TIEMPO', 3: 'A TIEMPO', 4: 'A TIEMPO', 5: 'DECIDIDO', 6: 'EMBARCANDO', 7: 'EMBARCANDO',
-  8: 'EMBARCANDO', 9: 'EN PISTA', 10: 'EN PISTA', 11: 'EN VUELO', 12: 'EN VUELO', 13: 'EN VUELO', 14: 'ATERRIZADO',
+  8: 'EMBARCANDO', 9: 'EN PISTA', 10: 'EN PISTA', 11: 'EN VUELO', 12: 'EN VUELO', 13: 'EN VUELO', 14: 'EN VUELO',
+  15: 'ATERRIZADO',
 };
 
 const K = ({ children }) => <span className="k">{children}</span>; // nombre de evento / comando
 const S = ({ children }) => <span className="st">{children}</span>; // ESTADO
 
-export const SLIDES = [
+export const ANEXO = [
   /* ───────────────────────── PORTADA ───────────────────────── */
   {
     sec: 0, layout: 'cover', title: 'Sistema de Reservas de una Aerolínea',
@@ -36,7 +38,7 @@ export const SLIDES = [
           <div className="pass-main">
             <div className="pass-top mono">
               <span>TARJETA DE EMBARQUE</span>
-              <span>ARQUITECTURA DE SOFTWARE · v3.1</span>
+              <span>ARQUITECTURA DE SOFTWARE · v3.4</span>
             </div>
             <div className="route">
               <div>
@@ -78,37 +80,39 @@ export const SLIDES = [
     body: (
       <>
         <Lead>
-          Arquitectura del sistema de reservas de una aerolínea híbrida, con Avianca como caso de referencia. Se evaluaron tres candidatas con una matriz ponderada y se eligieron los <b>microservicios orientados a eventos</b> (7,50 / 10), coordinados solo por <b>Apache Kafka</b>.
+          Arquitectura del sistema de reservas de una aerolínea híbrida, con Avianca como caso de referencia. Primero se decidió construir <b>alrededor del PSS actual (Amadeus Altéa)</b> y reemplazar su inventario solo en una segunda etapa condicionada. Luego se evaluaron tres candidatas con una matriz ponderada que incluye el costo total y se eligieron los <b>microservicios orientados a eventos</b> (7,50 / 10), coordinados solo por <b>Apache Kafka</b>.
         </Lead>
         <Stats items={[
           { v: '0', l: 'dobles asignaciones', s: '100 solicitudes sobre un asiento → 1 confirmación' },
-          { v: '99,9 %', l: 'disponibilidad mensual', s: 'máx. 43,8 min al mes, sin exclusiones' },
-          { v: '121 %', l: 'de la carga nominal', s: 'picos de Cyberlunes y Hot Sale' },
-          { v: '7,50', l: 'puntaje de la decisión', s: 'frente a 6,40 y 7,20' },
+          { v: '99,9 %', l: 'disponibilidad mensual', s: 'máx. 43,8 min al mes, sin exclusiones por mantenimiento' },
+          { v: '≈ 112 k', l: 'USD al mes, con el equipo', s: 'se paga si evita ≈ 8 h de caída total al año' },
+          { v: '≤ 2 h', l: 'para volver a vender', s: 'si se pierde la región; ≤ 1 min de datos perdidos' },
         ]} />
         <Cards cols={3} items={[
-          { tag: 'Asientos', t: 'Valkey coordina, PostgreSQL decide', d: 'Apartado con TTL en Valkey y confirmación condicional por estado y versión en PostgreSQL.' },
+          { tag: 'Asientos', t: 'Valkey coordina, PostgreSQL decide', d: 'Apartado con TTL en Valkey, verificación del token y confirmación condicional por estado y versión en PostgreSQL.' },
           { tag: 'Coordinación', t: 'Saga por Kafka + Outbox', d: 'Comandos y eventos con Outbox transaccional y consumidores idempotentes. HTTP solo en el borde.' },
-          { tag: 'Plataforma', t: '100 % servicios administrados de AWS', d: 'EKS con Fargate, MSK, RDS PostgreSQL, DocumentDB, ElastiCache, S3 y Redshift. Nada on-premise.' },
+          { tag: 'Plataforma', t: '100 % servicios administrados de AWS', d: 'EKS con Fargate, MSK, RDS PostgreSQL, DocumentDB, ElastiCache, S3 y Redshift; pilot light en us-west-2.' },
         ]} />
       </>
     ),
   },
   {
-    sec: 0, title: 'Plan de vuelo', kicker: 'Agenda',
-    body: ({ ir }) => (
-      <div className="board" role="table" aria-label="Agenda">
+    sec: 0, title: 'Anexo: plan de vuelo completo', kicker: 'Anexo para preguntas',
+    body: ({ ir, slides }) => (
+      <div className="board board-2" role="table" aria-label="Anexo por sección">
         <div className="board-row board-headrow mono" role="row">
           <span>PUERTA</span><span>DESTINO</span><span className="hide-sm">DIAPOS</span><span>ESTADO</span>
         </div>
         {SECCIONES.filter((x) => x.n > 0).map((x) => {
-          const desde = SLIDES.findIndex((z) => z.sec === x.n);
-          const n = SLIDES.filter((z) => z.sec === x.n).length;
+          const desde = slides.findIndex((z) => z.sec === x.n);
+          const n = slides.filter((z) => z.sec === x.n).length;
+          const base = slides.findIndex((z) => z.parte === 'anexo');
+          const num = (k) => `A${String(k - base + 1).padStart(2, '0')}`;
           return (
             <button key={x.n} className="board-row" role="row" onClick={() => ir(desde)}>
               <span className="mono gate">{x.code}</span>
               <span className="board-dest">{x.t}</span>
-              <span className="mono dim hide-sm">{String(desde + 1).padStart(2, '0')}–{String(desde + n).padStart(2, '0')}</span>
+              <span className="mono dim hide-sm">{n > 1 ? `${num(desde)}–${num(desde + n - 1)}` : num(desde)}</span>
               <span className={`mono board-st st-${ESTADO_SEC[x.n].split(' ')[0].toLowerCase()}`}>{ESTADO_SEC[x.n]}</span>
             </button>
           );
@@ -131,7 +135,7 @@ export const SLIDES = [
           </p>
           <div className="callout">
             <div className="callout-v">≈ USD 0,7 M</div>
-            <div>de ingresos en riesgo <b>por cada hora</b> sin venta: 1.509 M USD por trimestre ÷ 2.208 horas.</div>
+            <div>de ingresos en riesgo <b>por cada hora</b> sin venta: 1.509 M USD por trimestre ÷ 2.208 horas. Es una aproximación: no todo lo que no se vende en una hora se pierde (sección 5.8).</div>
           </div>
         </div>
         <div>
@@ -143,10 +147,25 @@ export const SLIDES = [
             <><b>OE2</b> Evaluar tres candidatas con una matriz ponderada y justificar la elección.</>,
             <><b>OE3</b> Describir los puntos de vista funcional, de información, concurrencia, despliegue, desarrollo y operacional.</>,
             <><b>OE4</b> Modelo de datos, estados, concurrencia, idempotencia y compensación.</>,
-            <><b>OE5</b> Perspectivas de seguridad y desempeño, trazabilidad y riesgos aceptados.</>,
+            <><b>OE5</b> Perspectivas de seguridad, desempeño, disponibilidad y evolución; trazabilidad, supuestos y riesgos aceptados.</>,
           ]} />
         </div>
       </Cols>
+    ),
+  },
+  {
+    sec: 1, title: 'Fallas observadas en el caso y respuesta del diseño',
+    body: (
+      <>
+        <T dense head={['Problema observado', 'Evidencia pública', 'Respuesta del diseño']} rows={[
+          ['Reclamaciones y reembolsos', '1.410 de 2.247 quejas contra aerolíneas ante la SIC (63 %, 2020–2021); multa de la Supertransporte de 125 SMMLV por falta de canales idóneos (2022) [3], [4].', 'Cancelación y reembolso como flujo automático con estados y confirmación de la pasarela (6.4.3); trazabilidad (P3); meta M5: 95 % de reembolsos en ≤ 7 días.'],
+          ['Venta detenida por completo', 'Página de reservas fuera de servicio un día (ago. 2018); venta suspendida hasta el 8 de diciembre de 2025 por la flota A320 [5], [6].', 'Clases de servicio y modo solo consulta aplicable por vuelo, ruta o canal, sin detener búsqueda ni postventa (14.1.1).'],
+          ['Caídas de LifeMiles', 'Sitio inutilizable y call center sin poder crear ni modificar reservas (dic. 2019) [7].', 'Perfil y Fidelización aislado: su caída no detiene la venta con dinero (escenario 12).'],
+          ['Proveedores sin contingencia', 'Notificaciones por WhatsApp y correo caídas por la falla global de Azure (oct. 2025) [8].', 'Notificaciones asíncronas que esperan en Kafka (clase C) y recuperación regional propia (14.1.4).'],
+          ['Cambio de distribución', 'Venta de agencias concentrada en EDIFACT; NDC de terceros suspendido (dic. 2025) [9].', 'Capa de Integración con modelo canónico que soporta ambos protocolos (6.3.1).'],
+        ]} />
+        <p className="note">Varias de esas fallas fueron decisiones operativas o coincidieron con la pandemia y problemas de liquidez, que ninguna arquitectura resuelve. Lo que sí está a su alcance es lo que muestran: <b>no había canales trazables para reclamar</b> y el negocio solo tenía <b>un interruptor global de venta</b>.</p>
+      </>
     ),
   },
   {
@@ -160,13 +179,13 @@ export const SLIDES = [
           </div>
           <div className="panel bad">
             <h4 className="h4">Fuera del alcance</h4>
-            <List items={['Check-in, embarque, equipaje, operación de vuelo', 'Tripulación', 'Overbooking deliberado y revenue management', 'Pago mixto (dinero + millas)', 'Inventario por clase de reserva', 'Integración real con Star Alliance', 'Ejecución real de pruebas de carga']} cols={2} />
+            <List items={['Check-in, embarque, equipaje, operación de vuelo', 'Tripulación', 'Overbooking deliberado y revenue management', 'Pago mixto (dinero + millas)', 'Inventario por clase de reserva', 'Integración real con Star Alliance', 'Ejecución real de pruebas de carga (las PoC se diseñan, no se ejecutan)']} cols={2} />
           </div>
         </Cols>
         <Cards cols={4} small items={[
           { tag: 'Descripción', t: 'IEEE 1471 / ISO 42010', d: 'Estructura: control, resumen, alcance, principios, vistas y escenarios.' },
-          { tag: 'Vistas', t: 'Rozanski & Woods', d: 'Seis puntos de vista y dos perspectivas (seguridad y desempeño).' },
-          { tag: 'Empresa', t: 'TOGAF', d: 'Cobertura de dominios y gobernanza de la arquitectura.' },
+          { tag: 'Vistas', t: 'Rozanski & Woods', d: 'Seis puntos de vista y cuatro perspectivas: seguridad, desempeño, disponibilidad y evolución.' },
+          { tag: 'Empresa', t: 'TOGAF · ITIL · COBIT', d: 'Dominios, ADM y gobernanza; operación por prácticas de ITIL; controles de COBIT 2019.' },
           { tag: 'Notación', t: 'UML · ArchiMate · BPMN', d: 'Mermaid para UML, Archi para negocio, Bizagi para el proceso.' },
         ]} />
         <p className="note"><b>Doble asignación</b> (error técnico que el diseño impide) ≠ <b>overbooking</b> (práctica comercial, fuera del alcance). El <b>apartado</b> es la reserva temporal de un asiento mientras el cliente paga.</p>
@@ -228,7 +247,7 @@ export const SLIDES = [
             <><b>Acumulación:</b> asíncrona, al emitir el tiquete (<K>TiqueteEmitido</K>) y se revierte con <K>TiqueteAnulado</K>.</>,
             <><b>Redención:</b> paso crítico de la Saga, no degradable: bloqueo, confirmación o liberación.</>,
           ]} />
-          <p className="muted">Persistencia políglota: perfil en DocumentDB, cuenta y libro de millas en PostgreSQL.</p>
+          <p className="muted">La cuenta de millas y la redención pasan a ser parte del sistema (la caída de 2019 dejó sin reservas el canal telefónico); la plataforma comercial de LifeMiles queda fuera. Perfil en DocumentDB, cuenta y libro de millas en PostgreSQL.</p>
         </div>
         <div className="panel">
           <Pill tone="violet">Star Alliance</Pill>
@@ -241,18 +260,21 @@ export const SLIDES = [
 
   /* ───────────────────────── 3. INTERESADOS ───────────────────────── */
   {
-    sec: 3, title: 'Interesados y su preocupación principal',
+    sec: 3, title: 'Interesados: preocupación, poder e interés',
     body: (
-      <Cards cols={4} small items={[
-        { tag: 'Cliente', t: 'Pasajero', d: 'Facilidad de uso, precios transparentes, disponibilidad en tiempo real.' },
-        { tag: 'Operación', t: 'Agente de aeropuerto o call center', d: 'Herramientas rápidas; resolver cambios y reembolsos.' },
-        { tag: 'TI', t: 'Administrador de sistemas', d: 'Disponibilidad 24/7, seguridad, mantenimiento y monitoreo distribuido.' },
-        { tag: 'Construcción', t: 'Equipo de desarrollo', d: 'Módulos claros, contratos estables, entornos reproducibles, pruebas.' },
-        { tag: 'Negocio', t: 'Gerencia comercial', d: 'Revenue management, reportes comerciales y analítica.' },
-        { tag: 'Aeropuerto', t: 'Check-in o embarque', d: 'Estado final y vigente de la reserva y del tiquete.' },
-        { tag: 'Externo', t: 'Socios interline o GDS', d: 'Interoperabilidad estricta con IATA NDC y EDIFACT.' },
-        { tag: 'Control', t: 'Cumplimiento o auditoría', d: 'Trazabilidad financiera total y protección de datos personales.' },
-      ]} />
+      <>
+        <Cards cols={4} small items={[
+          { tag: 'Poder medio · interés alto', t: 'Pasajero', d: 'Facilidad de uso, precios transparentes, disponibilidad en tiempo real. (6.4, 13.2)' },
+          { tag: 'Poder bajo · interés alto', t: 'Agente de aeropuerto o call center', d: 'Herramientas rápidas; resolver cambios y reembolsos. (6.4.3)' },
+          { tag: 'Poder medio · interés alto', t: 'Administrador de sistemas', d: 'Disponibilidad 24/7, seguridad, mantenimiento y monitoreo distribuido. (9, 12)' },
+          { tag: 'Poder medio · interés alto', t: 'Equipo de desarrollo', d: 'Módulos claros, contratos estables, entornos reproducibles, pruebas. (11)' },
+          { tag: 'Poder alto · interés alto', t: 'Gerencia comercial', d: 'Reportes y analítica desde el almacén histórico; el revenue management usa esos datos, pero queda fuera. (5.8, 10.3)', tone: 'amber' },
+          { tag: 'Poder bajo · interés medio', t: 'Check-in o embarque', d: 'Estado final y vigente de la reserva y del tiquete. (6.3.1)' },
+          { tag: 'Poder alto · interés medio', t: 'Socios interline o GDS', d: 'Interoperabilidad estricta con IATA NDC y EDIFACT. (2.2, 6.3.1)', tone: 'amber' },
+          { tag: 'Poder alto · interés medio', t: 'Cumplimiento o auditoría', d: 'Trazabilidad financiera total y protección de datos personales. (9.5, 13.1)', tone: 'amber' },
+        ]} />
+        <p className="note">Cada interesado aparece también como rol en la arquitectura de negocio (Figura 4). Entre paréntesis, la sección que atiende su preocupación.</p>
+      </>
     ),
   },
   {
@@ -280,9 +302,9 @@ export const SLIDES = [
     body: (
       <T dense head={['Propiedad', 'Objetivo medible', 'Mecanismo']} rows={[
         ['Integridad del inventario', 'Cero dobles asignaciones; 100 solicitudes simultáneas sobre un asiento → exactamente 1 confirmación.', 'Apartado en Valkey + confirmación condicional por estado y versión en PostgreSQL.'],
-        ['Disponibilidad', '99,9 % mensual (máx. 43,8 min), sin exclusiones por mantenimiento.', 'Activo-activo en 3 zonas, bases Multi-AZ, despliegues sin interrupción.'],
-        ['Tiempo de respuesta', 'p95: búsqueda ≤ 2 s; aceptación 202 ≤ 1 s; asientos apartados visibles ≤ 3 s.', 'Modelo de lectura, escalado selectivo, Saga asíncrona.'],
-        ['Throughput en picos', 'Sostener el 121 % de la carga nominal sin perder solicitudes.', 'Escalado horizontal por servicio; Búsqueda desacoplada.'],
+        ['Disponibilidad', '99,9 % mensual de la creación de reservas y la búsqueda (máx. 43,8 min), sin exclusiones por mantenimiento.', 'Activo-activo en 3 zonas, bases Multi-AZ, despliegues sin interrupción.'],
+        ['Tiempo de respuesta', 'p95: búsqueda ≤ 2 s; aceptación 202 ≤ 1 s; asientos apartados visibles ≤ 3 s, con carga nominal y con pico.', 'Modelo de lectura, escalado selectivo, Saga asíncrona.'],
+        ['Throughput en picos', 'Sostener el 121 % de la carga nominal sin perder solicitudes. Nominal: 1.850 búsquedas y 6 reservas/s; pico: 2.240 y 7,3; capacidad de diseño: 3.000 y 30.', 'Escalado horizontal por servicio; Búsqueda desacoplada.'],
         ['Consistencia', 'p99 de propagación de eventos < 2 s.', 'Outbox y consumidores idempotentes.'],
         ['Seguridad y datos', '0 datos de tarjeta; PCI-DSS v4.0.1 con tokenización; Ley 1581 de 2012.', 'Tokenización, cifrado, autenticación en el Gateway.'],
         ['Trazabilidad', '100 % de cambios financieros con evento inmutable; 10 años.', 'Almacén histórico y estados con historial.'],
@@ -300,7 +322,7 @@ export const SLIDES = [
         { tag: 'EC3 · Cae una zona', t: 'Una AZ de AWS no responde', d: 'Las otras zonas atienden, las bases conmutan. ≤ 2 min, cero reservas perdidas.' },
         { tag: 'EC4 · Pasarela lenta', t: '> 60 s sin respuesta', d: 'Pago EN_VERIFICACION; la reserva no expira; se concilia por webhook o consulta.' },
         { tag: 'EC5 · Abuso', t: 'Miles de solicitudes por minuto', d: 'Gateway y WAF limitan y bloquean; los legítimos mantienen sus percentiles.' },
-        { tag: 'EC6 · Despliegue con error', t: 'Nueva versión de Tarifas', d: 'Canary detecta la alarma y revierte: ≤ 10 min y < 10 % del tráfico afectado.' },
+        { tag: 'EC6 · Despliegue con error', t: 'Nueva versión de Tarifas', d: 'El canary (1 pod: del 25 % al 33 % de las particiones) detecta la alarma y revierte en ≤ 10 min; como máximo un tercio de las cotizaciones afectadas, reprocesadas desde la DLQ.' },
         { tag: 'EC7 · Auditoría', t: 'Pago de hace tres años', d: 'El histórico entrega todos los eventos del pago y su reserva en < 1 día hábil.' },
       ]} />
     ),
@@ -308,19 +330,44 @@ export const SLIDES = [
 
   /* ───────────────────────── 4. NEGOCIO ───────────────────────── */
   {
-    sec: 4, title: 'Cadena de valor, controladores y metas',
+    sec: 4, title: 'Cadena de valor, modelo operativo y estrategia',
     body: (
-      <Cols r="0.8fr 1.4fr">
+      <Cols r="0.9fr 1.1fr">
         <div>
           <div className="chain">
-            {['Marketing y tarifas', 'Reserva y venta', 'Check-in y embarque', 'Operación de vuelo', 'Postventa'].map((x, k) => (
-              <div key={x} className={`chain-step${k === 1 ? ' on' : ''}`}><span className="mono">{k + 1}</span>{x}</div>
+            {['Marketing y tarifas', 'Reserva y venta', 'Check-in y embarque', 'Operación de vuelo', 'Postventa: millas, reembolsos, reclamos'].map((x, k) => (
+              <div key={x} className={`chain-step${k === 1 || k === 4 ? ' on' : ''}`}><span className="mono">{k + 1}</span>{x}</div>
             ))}
           </div>
-          <p>El sistema cubre el <b>segundo eslabón</b>, incluida la emisión del tiquete: entrega el estado de los tiquetes a check-in y recibe reglas de precios desde marketing.</p>
-          <p className="muted"><b>Modelo operativo:</b> inventario centralizado (un pool de asientos por vuelo para todos los canales) y atención descentralizada. Por eso la alta disponibilidad y la consistencia son requisitos de negocio.</p>
+          <p className="muted">Actividades de apoyo: tecnología, gestión de flota y tripulaciones, finanzas y cumplimiento.</p>
         </div>
+        <div>
+          <p>El sistema cubre la <b>reserva, la venta y la emisión</b>, y la parte de la <b>postventa que nace de una reserva</b> (cambios, cancelaciones, reembolsos y millas). Es en esa postventa donde hoy se pierde valor, por las reclamaciones y sanciones. Entrega el estado de los tiquetes y la lista de pasajeros al check-in y recibe reglas de precios de marketing.</p>
+          <p><b>Modelo operativo:</b> inventario centralizado (un pool de asientos por vuelo para web, app, call center, agencias y GDS) y atención descentralizada. Por eso la alta disponibilidad y la consistencia son requisitos de negocio.</p>
+          <div className="callout">
+            <div className="callout-v">Estrategia</div>
+            <div>Propósito de Avianca: generar más acceso al transporte aéreo [32]. El sistema sostiene esa estrategia: competir con estructura de bajo costo sin perder la red, los GDS ni la fidelización de una aerolínea tradicional.</div>
+          </div>
+        </div>
+      </Cols>
+    ),
+  },
+  {
+    sec: 4, title: 'Controladores, metas con indicador y requisitos',
+    body: (
+      <Cols r="1.25fr 1fr">
         <Fig id="2" />
+        <div>
+          <T dense head={['Meta', 'Indicador (KPI)', 'Controlador']} rows={[
+            ['M1 · Ingreso por asiento', '0 min de inactividad por cambio de tarifa', 'D1 competencia de bajo costo'],
+            ['M2 · Sin doble asignación', '0 casos al año', 'D2 volumen de pasajeros'],
+            ['M3 · Venta 24/7 en picos', '99,9 % de disponibilidad mensual', 'D2 y D3 varios países y husos'],
+            ['M4 · Estándares del sector', '100 % de mensajes certificados con Amadeus y Sabre', 'D4 EDIFACT y NDC'],
+            ['M5 · Pagos y datos confiables', '0 fugas, ROC de PCI-DSS vigente y 95 % de reembolsos en ≤ 7 días (línea base 2022: 90 % en < 30 días)', 'D5 datos, PCI-DSS y derechos del pasajero'],
+            ['M6 · Fidelizar con millas', '99 % de redenciones sin error', 'D6 16 M socios LifeMiles'],
+          ]} />
+          <p className="muted">Las líneas base que no son públicas se miden en los tres meses previos a la etapa 1; las metas se evalúan doce meses después del corte por canal. Toda decisión técnica se rastrea hasta una meta (P8).</p>
+        </div>
       </Cols>
     ),
   },
@@ -370,16 +417,53 @@ export const SLIDES = [
 
   /* ───────────────────────── 5. CANDIDATAS ───────────────────────── */
   {
-    sec: 5, title: 'Tres arquitecturas candidatas',
+    sec: 5, title: 'Contexto actual (AS-IS) y brechas',
+    body: (
+      <Cols r="1fr 1fr">
+        <div>
+          <h4 className="h4">AS-IS (paso 3 de la selección de estilos)</h4>
+          <List items={[
+            <><b>Sistemas:</b> reservas, inventario, check-in, embarque y control de salidas corren en el PSS <b>Amadeus Altéa</b>, alojado por Amadeus (acuerdo renovado en 2021). Distribución por GDS con EDIFACT; web y app propias; LifeMiles con plataforma propia.</>,
+            <><b>Equipo:</b> sin datos públicos. Se supone experiencia en Amadeus y canales digitales, pero no operando microservicios (riesgo DevOps).</>,
+            <><b>Costos:</b> no son públicos; un PSS se cobra por pasajero embarcado o segmento, así que crece con el volumen.</>,
+            <><b>Restricciones:</b> operación sin interrupción, solo servicios administrados de AWS (P6), PCI-DSS y datos personales, y convivencia con el actual durante la transición.</>,
+          ]} />
+        </div>
+        <div>
+          <h4 className="h4">Brechas AS-IS → TO-BE</h4>
+          <T dense head={['Dominio', 'Hoy', 'Propuesta']} rows={[
+            ['Negocio', 'La postventa genera reclamaciones y sanciones', 'Flujo automático y trazable'],
+            ['Datos', 'Repartidos entre proveedores, sin historial propio', 'Un dueño por servicio y almacén histórico'],
+            ['Aplicaciones', 'Una contingencia apaga toda la venta', 'Servicios aislados con degradación por partes'],
+            ['Tecnología', 'Proveedores sin contingencia', 'Recuperación regional propia'],
+            ['Gobernanza', 'Sin seguimiento de metas', 'Comités con el negocio y metas M1–M6'],
+          ]} />
+        </div>
+      </Cols>
+    ),
+  },
+  {
+    sec: 5, title: 'Alternativa 0 frente al PSS y hoja de ruta por etapas',
     body: (
       <>
-        <p className="note">AS-IS: un sistema legado integrado con los GDS y LifeMiles, que debe convivir con el nuevo durante la transición. Restricciones: operación sin interrupción, solo servicios administrados de AWS, PCI-DSS y un equipo que debe ganar madurez DevOps.</p>
+        <Lead>Antes de elegir el estilo se decide <b>qué se construye</b>: comprar (seguir con Altéa), construir alrededor de él o reemplazarlo.</Lead>
         <Cards cols={3} items={[
-          { tag: 'Candidata A', t: 'Monolito modular', d: <><p>Una aplicación desplegable sobre una base SQL con transacciones ACID.</p><p className="pro">+ Integridad muy alta, baja latencia, operación simple, costo bajo.</p><p className="con">− Un fallo afecta a todo, escala como unidad, el código se acopla.</p></> },
-          { tag: 'Candidata B', t: 'Microservicios con Kafka', tone: 'amber', d: <><p>Servicios por dominio, cada uno con su base, comunicados por eventos con Saga y Outbox.</p><p className="pro">+ Aislamiento de fallos, escalado independiente, equipos autónomos.</p><p className="con">− Complejidad operativa, mayor costo, latencia por saltos.</p></> },
-          { tag: 'Candidata C', t: 'Serverless', d: <><p>Lambda, Step Functions, EventBridge y DynamoDB con escrituras condicionales.</p><p className="pro">+ Redundancia y escalado automáticos, sin servidores.</p><p className="con">− Integridad limitada, arranques en frío, lógica fragmentada, costo alto con carga constante.</p></> },
+          { tag: 'Alternativa 0 · descartada', t: 'Seguir con Altéa y construir solo los canales', d: 'No resuelve las fallas observadas, que están en la postventa, los canales y la dependencia de proveedores sin contingencia.', tone: 'red' },
+          { tag: 'Etapa 1 · adoptada', t: 'Construir alrededor del PSS', d: 'Venta, postventa, pagos y fidelización propios; Altéa sigue como inventario. Ataca las fallas sin el riesgo de migrar el inventario.', tone: 'teal' },
+          { tag: 'Etapa 2 · condicionada', t: 'Inventario propio por lotes de vuelos', d: 'Solo si la etapa 1 cumple sus metas durante tres meses y la aerolínea se certifica ante los GDS como anfitrión de su inventario. Puede detenerse o revertirse.', tone: 'amber' },
         ]} />
+        <p className="note">La etapa 2 se justifica por negocio, no por fallas: fijar precios y servicios complementarios por asiento sin depender del ciclo de cambios del proveedor y dejar de pagar un PSS cuyo costo crece con cada pasajero. En ambas etapas <b>Altéa conserva el check-in y el control de salidas</b>, que reciben la lista de pasajeros por mensajes IATA <b>PNL y ADL</b> desde la Capa de Integración.</p>
       </>
+    ),
+  },
+  {
+    sec: 5, title: 'Tres arquitecturas candidatas',
+    body: (
+      <Cards cols={3} items={[
+        { tag: 'Candidata A', t: 'Monolito modular', d: <><p>Una aplicación desplegable sobre una base SQL con transacciones ACID.</p><p className="pro">+ Integridad muy alta, baja latencia, operación simple, costo bajo con volúmenes medios.</p><p className="con">− Un fallo afecta a todo, escala como unidad, el código se acopla.</p></> },
+        { tag: 'Candidata B', t: 'Microservicios con Kafka', tone: 'amber', d: <><p>Servicios por dominio, cada uno con su base, comunicados por eventos con Saga y Outbox.</p><p className="pro">+ Aislamiento de fallos (si cae Fidelización, se sigue vendiendo con dinero), escalado independiente, equipos autónomos.</p><p className="con">− Complejidad operativa, mayor costo, latencia por saltos (mitigada con modelo de lectura y 202).</p></> },
+        { tag: 'Candidata C', t: 'Serverless', d: <><p>Lambda, Step Functions, EventBridge y DynamoDB con escrituras condicionales.</p><p className="pro">+ Redundancia y escalado automáticos, sin servidores; infraestructura más barata que B a estos volúmenes.</p><p className="con">− Conciliación y auditoría del inventario más difíciles (sin consultas relacionales), arranques en frío, lógica fragmentada y difícil de probar.</p></> },
+      ]} />
     ),
   },
   {
@@ -393,7 +477,7 @@ export const SLIDES = [
           ['Tiempo de respuesta', '10 %', <b className="hi">8</b>, '7', '6'],
           ['Mantenibilidad y evolución', '10 %', '5', <b className="hi">8</b>, '7'],
           ['Complejidad operativa (10 = menor)', '10 %', <b className="hi">9</b>, '4', '6'],
-          ['Costo (10 = menor)', '10 %', <b className="hi">8</b>, '5', '6'],
+          ['Costo total: infra + equipo (10 = menor)', '10 %', <b className="hi">8</b>, '5', '6'],
         ]} />
         <div>
           <div className="bars">
@@ -404,8 +488,8 @@ export const SLIDES = [
               </div>
             ))}
           </div>
-          <p><b>Disponibilidad y picos</b>, los dos requisitos críticos, suman el 45 % del peso.</p>
-          <p className="muted"><b>Sensibilidad:</b> con disponibilidad al 15 % y complejidad al 20 %: A = 6,80, B = 7,00, C = 7,00. B nunca queda por debajo, pero su ventaja sobre C depende del peso de la operación; por eso la complejidad operativa es el principal riesgo aceptado.</p>
+          <p><b>Disponibilidad y picos</b>, los dos requisitos críticos, suman el 45 % del peso. <b>Rúbrica:</b> 9–10 si cumple por diseño, 6–8 con mecanismos adicionales, 4–5 con dificultad; el costo sale de la sección 5.8.</p>
+          <p className="muted"><b>Sensibilidad:</b> disponibilidad 15 % y complejidad 20 % → A 6,80, B 7,00, C 7,00. Integridad 25 % → A 6,85, B 7,30, C 6,95. B nunca queda por debajo, pero su ventaja sobre C depende del peso de la operación. La integridad pesa 15 % porque las tres pueden garantizarla; cambia el esfuerzo.</p>
         </div>
       </Cols>
     ),
@@ -416,11 +500,11 @@ export const SLIDES = [
       <Cols r="1fr 1.1fr">
         <div>
           <Lead>Se elige B (7,50). Un monolito sostiene con dificultad la disponibilidad 24/7 y los picos: un único punto de falla, escalado vertical costoso y despliegues que arriesgan todo.</Lead>
-          <p>Frente a C, B ofrece más control sobre la integridad del inventario (transacciones de PostgreSQL sobre todos los asientos de una reserva), latencias más predecibles y menor costo con carga alta y constante.</p>
+          <p>Frente a C, B ofrece más control sobre la integridad del inventario (transacciones de PostgreSQL sobre todos los asientos de una reserva), latencias más predecibles y una lógica de reserva más fácil de probar y de seguir, <b>a cambio de un costo de infraestructura mayor</b> (sección 5.8).</p>
         </div>
         <Cards cols={1} small items={[
-          { tag: 'Principal', t: 'Microservicios con publicación/suscripción', d: 'Servicios por dominio que publican y consumen eventos en Kafka.', tone: 'amber' },
-          { tag: 'Subsidiario', t: 'Hub de integración (hub-and-spoke)', d: 'La Capa de Integración traduce GDS, NDC y socios a un modelo canónico.' },
+          { tag: 'Principal', t: 'Microservicios con publicación/suscripción', d: 'Servicios por dominio que publican y consumen eventos en Kafka. Aislamiento y escalado independiente, a cambio de consistencia eventual.', tone: 'amber' },
+          { tag: 'Subsidiario', t: 'Hub de integración (hub-and-spoke)', d: 'La Capa de Integración es el único contacto con EDIFACT, NDC, aliados y Altéa (PNL/ADL). Excepción: Control de Vuelos deja la programación en S3 (SSIM).' },
           { tag: 'Subsidiario', t: 'Multicapa', d: 'Canales, entrada, negocio, mensajería y datos, en un solo sentido.' },
           { tag: 'Subsidiario', t: 'Cliente-servidor', d: 'Entre los canales y el API Gateway.' },
           { tag: 'Subsidiario', t: 'Hexagonal', d: 'Dentro de cada servicio, puertos y adaptadores aíslan el dominio.' },
@@ -451,6 +535,7 @@ export const SLIDES = [
           <div className="dofa-q d"><b>Debilidades</b><List items={['Consistencia distribuida con Saga', 'Latencia acumulada de red', 'Alta dependencia de madurez DevOps']} /></div>
           <div className="dofa-q o"><b>Oportunidades</b><List items={['Expansión de rutas (+38 M pax/año)', 'Tarifas dinámicas por tallas XS–L', 'Star Alliance con un nuevo adaptador']} /></div>
           <div className="dofa-q a"><b>Amenazas</b><List items={['Alto impacto financiero de las caídas', 'Irregularidades masivas simultáneas', 'Adopción lenta de NDC']} /></div>
+          <p className="muted" style={{ gridColumn: '1 / -1', margin: 0 }}>Las debilidades se mitigan en la autocrítica (5.4); las oportunidades se apoyan en los puntos de variación (14.2) y las amenazas justifican la perspectiva de disponibilidad (14.1).</p>
         </div>
         <Fig id="6T" />
       </Cols>
@@ -475,23 +560,85 @@ export const SLIDES = [
       </>
     ),
   },
+  {
+    sec: 5, title: 'Supuestos externos y riesgos aceptados',
+    body: (
+      <Cols>
+        <div>
+          <h4 className="h4">Tres condiciones que el equipo no controla</h4>
+          <Cards cols={1} small items={[
+            { tag: 'Supuesto 1', t: 'La pasarela separa autorización y captura', d: 'Y entrega webhooks firmados. Si un medio no separa los pasos, la compensación es un reembolso.' },
+            { tag: 'Supuesto 2', t: 'La pasarela aloja la captura de la tarjeta', d: 'Página, componente o enlace de pago: el sistema nunca recibe el número de tarjeta.' },
+            { tag: 'Supuesto 3', t: 'Los GDS esperan el resultado de la Saga', d: 'Dentro de su sesión. Se comprueba con la PoC3.' },
+          ]} />
+        </div>
+        <div>
+          <h4 className="h4">Riesgos aceptados explícitamente</h4>
+          <Cards cols={1} small items={[
+            { t: 'Complejidad operativa de los microservicios', d: 'Mitigada con servicios administrados y automatización.', tone: 'red' },
+            { t: 'AWS como proveedor único', d: 'Mitigada con estándares abiertos: Kafka, PostgreSQL, API de MongoDB y contenedores.', tone: 'red' },
+            { t: 'Hasta 2 s de consistencia eventual en la búsqueda', d: 'La reserva siempre verifica la disponibilidad en Inventario.', tone: 'red' },
+            { t: 'Si cae la región: hasta 1 min de datos y 2 h sin venta', d: 'Acotados con el pilot light en us-west-2 (14.1.4).', tone: 'red' },
+          ]} />
+        </div>
+      </Cols>
+    ),
+  },
+  {
+    sec: 5, title: 'Costo y beneficio',
+    body: (
+      <Cols r="1.1fr 1fr">
+        <div>
+          <T dense head={['USD al mes', 'A · Monolito', 'B · Microservicios', 'C · Serverless']} rows={[
+            ['Infraestructura', '≈ 6.500 + 1.500 contingencia', '≈ 10.000 + 2.000 pilot light', '≈ 6.000 + 1.500 contingencia'],
+            ['Equipo (5.000 por persona)', '12 personas · 60.000', '20 personas · 100.000', '16 personas · 80.000'],
+            [<b>Costo total</b>, <b className="hi">≈ 68.000</b>, <b>≈ 112.000</b>, <b>≈ 87.500</b>],
+          ]} />
+          <p className="muted">B: tres equipos de producto (venta; pagos y postventa; integración y fidelización) y uno de plataforma de cuatro personas que opera EKS, MSK, la observabilidad y el pipeline. Precios de lista de us-east-1 con la carga nominal; orden de magnitud a confirmar con la calculadora de AWS. El orden A &lt; C &lt; B es el que reflejan los puntajes de costo (8, 6, 5). En la etapa 1 B cuesta menos, porque el inventario sigue en Altéa.</p>
+        </div>
+        <div>
+          <div className="callout">
+            <div className="callout-v">≈ 8 h</div>
+            <div>de caída total evitada al año pagan los <b>44.000 USD/mes</b> que B cuesta más que A (528.000 al año).</div>
+          </div>
+          <List items={[
+            <><b>Pérdida por hora sin venta:</b> 0,7 M USD en riesgo; se supone que se pierde el 10 % (los demás compran después): ≈ 68.000 USD por hora.</>,
+            <><b>Frente a A:</b> con un monolito al 99,5 % (cualquier fallo detiene toda la venta) caería ≈ 44 h al año frente a &lt; 9 h de B al 99,9 %. B evitaría ≈ 35 h, unos <b>2,4 M USD al año</b>, cuatro veces su costo adicional.</>,
+            <><b>Frente a C:</b> B cuesta ≈ 24.500 USD/mes más, a cambio de control sobre la integridad del inventario y una lógica de reserva fácil de probar.</>,
+          ]} />
+          <p className="muted">Supuestos del equipo, a validar con la aerolínea (Anexo A).</p>
+        </div>
+      </Cols>
+    ),
+  },
 
   /* ───────────────────────── 6. ARQUITECTURA PROPUESTA ───────────────────────── */
   {
-    sec: 6, title: 'Decisiones de diseño',
+    sec: 6, title: 'Decisiones de diseño (1/2): coordinación y datos',
     body: (
       <T dense head={['Decisión', 'Por qué', 'Riesgo o alternativa descartada']} rows={[
-        ['Microservicios por dominio, base lógica propia', 'Aislamiento de fallos y escalado independiente (P2).', 'Complejidad; las bases pueden compartir clúster al inicio.'],
-        [<b className="hi">Kafka como único medio entre servicios</b>, 'Si Inventario o Pagos se detienen, sus comandos esperan en el tópico. Registro completo de la coordinación (P3).', 'Más latencia por paso que REST. Se descartó REST síncrono porque acopla la disponibilidad.'],
-        ['Saga orquestada por Reservas, con compensaciones', 'Coordina inventario, tarifas, pago y millas sin transacción distribuida.', 'Correlación por id_saga, timeouts, reenvío idempotente y lease.'],
-        ['Outbox transaccional + consumidores idempotentes', 'Estado y mensaje se guardan de forma atómica.', 'Latencia del relay; una tabla Outbox por servicio.'],
-        ['Valkey coordina, PostgreSQL es autoridad', 'Baja latencia del apartado con TTL; el CAS impide la doble asignación aunque Valkey pierda datos (P1).', 'Dos mecanismos para un problema; se mide con benchmark.'],
-        ['Persistencia políglota en Fidelización', 'Saldo de millas en PostgreSQL; perfil flexible de lectura intensiva en DocumentDB.', 'Dos motores en un servicio.'],
+        ['Microservicios por dominio, base lógica propia', 'Aislamiento de fallos y escalado independiente (P2).', 'Complejidad. Tarifas, Emisión y Notificaciones comparten instancia al inicio; Pagos, Inventario, Reservas y Fidelización tienen instancia propia.'],
+        [<b className="hi">Kafka como único medio entre servicios</b>, 'Si Inventario o Pagos se detienen, sus comandos esperan en el tópico. Registro completo y ordenado de la coordinación (P3).', 'Más latencia por paso que REST; REST síncrono acopla la disponibilidad. Frente a SQS/SNS (sin historial para reproducir) y EventBridge (sin orden por clave).'],
+        ['Saga orquestada por Reservas, con compensaciones', 'Coordina inventario, tarifas, pago y millas sin transacción distribuida; el estado vive en la base de Reservas.', 'Correlación, timeouts y lease. Se descartó la coreografía (flujo repartido, difícil de compensar) y el 2PC (bloquea recursos; no lo soportan Kafka ni bases independientes).'],
+        ['Outbox transaccional + consumidores idempotentes', 'Estado y mensaje se guardan de forma atómica; los duplicados no repiten efectos.', 'Latencia del relay; una tabla Outbox por servicio.'],
+        ['Valkey coordina, PostgreSQL es autoridad', 'Baja latencia del apartado con TTL; el CAS impide la doble asignación aunque Valkey pierda datos (P1).', 'Dos mecanismos para un problema; se mide con benchmark. Valkey y no Redis: continuación de código abierto (BSD) tras el cambio de licencia de 2024, compatible y más barata en ElastiCache.'],
+        ['Persistencia políglota en Fidelización', 'Saldo de millas en PostgreSQL (≈ 7.700 redenciones/día); perfil flexible de lectura intensiva en DocumentDB.', 'Dos motores en un servicio. Todo en Mongo: el saldo necesita transacciones; todo en PostgreSQL: el perfil cambia de estructura.'],
         ['Pago en dos pasos: autorización y captura', 'Anula sin cobrar si el asiento se pierde.', 'Si la pasarela no separa pasos, la compensación es un reembolso.'],
-        ['Histórico único en S3 + Redshift vía Kafka Connect', 'Auditoría y analítica en una sola plataforma.', 'Costo creciente; ciclo de vida a Glacier.'],
+        ['Histórico único en S3 + Redshift vía Kafka Connect', 'Auditoría y analítica en una sola plataforma (P3).', 'Costo creciente; ciclo de vida a Glacier.'],
+      ]} />
+    ),
+  },
+  {
+    sec: 6, title: 'Decisiones de diseño (2/2): flujo, plataforma y lenguaje',
+    body: (
+      <T dense head={['Decisión', 'Por qué', 'Riesgo o alternativa descartada']} rows={[
         ['Orden: cotizar, apartar, autorizar, confirmar, capturar', 'Los pasos sin efectos van primero.', 'Si el precio cambia, el cliente lo ve antes del apartado.'],
-        ['Modelo de lectura de Búsqueda en DocumentDB', 'Aísla los picos del núcleo transaccional.', 'Retraso < 2 s; la reserva siempre verifica en Inventario.'],
-        ['EKS con Fargate', 'KEDA, Argo Rollouts, namespaces, RBAC y security groups for pods.', 'Sin DaemonSets ni service mesh; resiliencia vía lib-resiliencia.'],
+        ['Inventario por asiento, no por clase de reserva', 'Simplifica el control de la doble asignación y permite elegir asiento. Los GDS esperan disponibilidad por clase: en la etapa 1 la publica Altéa; en la 2, Tarifas la calcula a partir de los asientos libres por cabina.', 'La gestión por clase (revenue management) queda como extensión.'],
+        ['Modelo de lectura de Búsqueda en DocumentDB', 'Aísla los picos del núcleo transaccional y atiende el mapa de asientos.', 'Retraso < 2 s; la reserva siempre verifica en Inventario.'],
+        ['EKS con perfiles de Fargate', 'KEDA, canary con Argo Rollouts, namespaces, RBAC y security groups for pods; sin instancias EC2.', 'Curva mayor que ECS; sin DaemonSets ni service mesh: timeouts y circuit breaker los da lib-resiliencia.'],
+        ['TypeScript sobre Node.js con NestJS', 'Los servicios pasan el tiempo esperando E/S; un solo lenguaje para servicios, bibliotecas y contratos; módulos e inyección para la hexagonal.', 'No apto para cálculo intensivo (worker threads en Tarifas). Java/Spring descartado por memoria por pod y un segundo lenguaje.'],
+        ['AWS como proveedor único, solo administrados', 'Menos carga operativa y redundancia en varias zonas (P6).', 'Dependencia del proveedor, mitigada con estándares abiertos e IaC.'],
+        ['Adaptador Star Alliance previsto', 'Misma Saga y mismas garantías para la venta de aliados.', 'Fuera del alcance de esta versión.'],
       ]} />
     ),
   },
@@ -538,15 +685,35 @@ export const SLIDES = [
       <T dense head={['Componente', 'Responsabilidad', 'Consume', 'Publica']} rows={[
         ['API Gateway', 'Entrada única: autentica, valida, limita la tasa y enruta. Sin lógica de negocio.', 'HTTP de borde', '—'],
         ['Búsqueda', 'Disponibilidad, itinerarios y mapa de asientos, solo lectura sobre un modelo de lectura.', 'Eventos de inventario y tarifas', '—'],
-        ['Gestión de Reservas', 'Orquesta las Sagas; dueña de reservas, itinerarios, pasajeros y asignaciones. Activo-activo.', <>Respuestas de la Saga; <K>EmisionFallida</K></>, <><K>ReservaConfirmada</K>, Modificada, Cancelada, Expirada, Fallida</>],
-        ['Inventario de Asientos', 'Fuente de verdad: apartado en Valkey y CAS en PostgreSQL.', <><K>ApartarAsientos</K>, Confirmar, LiberarApartado, Liberar</>, <><K>AsientosApartados</K>, <K>ConflictoAsientos</K>, AsientoOcupado…</>],
-        ['Tarifas y Precios', 'Cotiza por tarifa, cabina, canal y vigencia; recargo por canal; reembolsable.', <><K>CotizarReserva</K>, CotizarCambio, CalcularReembolso</>, <><K>CotizacionCalculada</K>, TarifaPublicada…</>],
-        ['Pagos', 'Autoriza, captura, anula y reembolsa; deduplica webhooks. Nunca guarda la tarjeta.', <><K>IniciarPago</K>, CapturarPago, AnularAutorizacion, SolicitarReembolso</>, <><K>PagoAutorizado</K>, EnVerificacion, Capturado, ReembolsoConfirmado…</>],
-        ['Emisión de Tiquetes', 'Un tiquete por pasajero y un cupón por segmento; anula al cancelar.', 'ReservaConfirmada, Modificada, Cancelada', <><K>TiqueteEmitido</K>, TiqueteAnulado, EmisionFallida</>],
-        ['Perfil y Fidelización', 'Perfil (DocumentDB) y cuenta LifeMiles (PostgreSQL) con movimientos idempotentes.', <><K>BloquearMillas</K>, ConfirmarRedencion, LiberarMillas, RevertirRedencion</>, <><K>MillasBloqueadas</K>, RedencionConfirmada, MillasAcumuladas…</>],
+        ['Gestión de Reservas', 'Orquesta las Sagas de creación y cancelación; dueña de reservas, itinerarios, pasajeros, asignaciones y estado de cada Saga. Activo-activo.', <>Respuestas de la Saga; <K>TiqueteEmitido</K>, <K>EmisionFallida</K>, <K>TarifaPublicada</K> (réplica local)</>, <>Comandos de la Saga; <K>ReservaConfirmada</K>, Modificada, Cancelada, Expirada, Fallida</>],
+        ['Inventario de Asientos', 'Fuente de verdad: apartado en Valkey y CAS en PostgreSQL. Mantiene la programación de Control de Vuelos.', <><K>ApartarAsientos</K>, <K>RenovarApartado</K>, Confirmar, LiberarApartado, Liberar</>, <><K>AsientosApartados</K>, ApartadoRechazado, Confirmados, <K>ConflictoAsientos</K>, Liberados; AsientoOcupado/Liberado</>],
+        ['Tarifas y Precios', 'Cotiza por tarifa, cabina, canal y vigencia; recargo por canal; reembolsable.', <><K>CotizarReserva</K>, CotizarCambio, CalcularReembolso</>, <><K>CotizacionCalculada</K>, CotizacionRechazada, CambioCotizado, ReembolsoCalculado; TarifaPublicada</>],
+        ['Pagos', 'Autoriza, captura, anula y reembolsa; deduplica webhooks. Nunca guarda la tarjeta.', <><K>IniciarPago</K>, CapturarPago, AnularAutorizacion, SolicitarReembolso</>, <><K>PagoAutorizado</K>, Rechazado, EnVerificacion, Capturado, <K>CapturaRechazada</K>, PagoAnulado, ReembolsoConfirmado, ReembolsoFallido</>],
+        ['Emisión de Tiquetes', 'Un tiquete por pasajero y un cupón por segmento; anula al cancelar; atiende la consulta de tiquetes.', 'ReservaConfirmada, Modificada, Cancelada', <><K>TiqueteEmitido</K>, TiqueteAnulado, EmisionFallida</>],
+        ['Perfil y Fidelización', 'Perfil (DocumentDB) y cuenta LifeMiles (PostgreSQL) con movimientos idempotentes; acumula con TiqueteEmitido.', <><K>BloquearMillas</K>, ConfirmarRedencion, LiberarMillas, RevertirRedencion</>, <><K>MillasBloqueadas</K>, BloqueoMillasRechazado, RedencionConfirmada, MillasLiberadas, MillasAcumuladas</>],
         ['Notificaciones', 'Correo y SMS por evento, sin duplicados por evento y canal.', 'Eventos de reserva, tiquete y reembolso', '—'],
         ['Capa de Integración', 'EDIFACT, NDC y Star Alliance → modelo canónico; etiqueta el canal.', 'Contratos de borde', '—'],
       ]} />
+    ),
+  },
+  {
+    sec: 6, title: 'Interfaces HTTP de borde',
+    body: (
+      <Cols r="1.3fr 0.8fr">
+        <T dense head={['Operación', 'Servicio', 'Respuesta']} rows={[
+          [<Code>POST /reservas</Code>, 'Gestión de Reservas', '202 con el id de la reserva · 409 si la clave de idempotencia se reutiliza con otro contenido · 422 si los datos no son válidos'],
+          [<><Code>GET /reservas/{'{id}'}</Code> · <Code>GET /reservas?localizador&amp;apellido</Code></>, 'Gestión de Reservas', 'Estado (PENDIENTE, CONFIRMADA, FALLIDA, EXPIRADA, CANCELADA) y su motivo'],
+          [<Code>POST /reservas/{'{id}'}/cancelacion</Code>, 'Gestión de Reservas', '202 · 409 si el primer segmento ya salió'],
+          [<><Code>GET /itinerarios</Code> · <Code>GET /vuelos/{'{id}'}/asientos</Code></>, 'Búsqueda', 'Ofertas con su id_oferta y mapa de asientos'],
+          [<><Code>GET /tiquetes/{'{id}'}</Code> · <Code>GET</Code>/<Code>PUT /perfil</Code></>, 'Emisión · Perfil y Fidelización', 'Tiquete; perfil del pasajero'],
+          [<Code>POST /webhooks/pasarela</Code>, 'Pagos', 'Verifica la firma HMAC; 200 tras deduplicar'],
+        ]} />
+        <div>
+          <Lead>Son las <b>únicas</b> operaciones que los canales invocan por el API Gateway. Todo lo demás viaja por Kafka.</Lead>
+          <p className="muted">Errores comunes: <b>401/403</b> autenticación y permisos, <b>429</b> límite de tasa y <b>503</b> modo solo consulta o control de admisión.</p>
+          <p className="muted">El cliente envía solo el id de la oferta: el precio siempre lo calcula Tarifas en el servidor.</p>
+        </div>
+      </Cols>
     ),
   },
   {
@@ -558,6 +725,10 @@ export const SLIDES = [
           <Lead>Cada adaptador traduce los mensajes externos a un <b>modelo canónico</b>, etiqueta el canal de origen (para el recargo) y aplica la idempotencia.</Lead>
           <p>Después invoca los <b>mismos contratos de borde</b> que los canales propios: una reserva desde un GDS pasa por la misma Saga y las mismas garantías que una reserva web.</p>
           <p className="muted">Como el GDS espera respuesta en su sesión, el adaptador consulta el estado hasta que la Saga termina o vence el tiempo del GDS. El adaptador Star Alliance es un diseño previsto.</p>
+          <Cards cols={2} small items={[
+            { tag: 'Agencias por GDS', t: 'Pago por BSP de IATA', d: 'IniciarPago lleva el medio BSP y el código IATA de la agencia; Pagos registra la obligación sin llamar a la pasarela, y la captura y los reembolsos se reportan al BSP. El resto de la Saga no cambia.' },
+            { tag: 'Altéa', t: 'Lista de pasajeros', d: 'El check-in y el control de salidas, que siguen en Altéa, reciben PNL y ADL desde la Capa de Integración.' },
+          ]} />
         </div>
       </Cols>
     ),
@@ -571,9 +742,9 @@ export const SLIDES = [
           <li><b>Creación (HTTP).</b> Con clave de idempotencia y token de pago. En una transacción: reserva <S>PENDIENTE</S>, Saga y <K>CotizarReserva</K> en el Outbox. Responde <b>202</b>.</li>
           <li><b>Cotización.</b> Tarifas responde <K>CotizacionCalculada</K>.</li>
           <li><b>Apartado.</b> Inventario aparta en Valkey, en orden de id y todo o nada → <K>AsientosApartados</K> con su vigencia.</li>
-          <li><b>Pago.</b> Si la regla de tiempos lo permite, <K>IniciarPago</K> → <K>PagoAutorizado</K>, <K>PagoRechazado</K> o <K>PagoEnVerificacion</K>.</li>
+          <li><b>Pago.</b> Si la regla de tiempos lo permite, <K>IniciarPago</K> → <K>PagoAutorizado</K>, <K>PagoRechazado</K> o <K>PagoEnVerificacion</K>. Con 3-D Secure o PSE, mientras el cliente se autentica la Saga publica <K>RenovarApartado</K> (hasta 15 min más).</li>
           <li><b>Confirmación.</b> CAS por estado y versión de todos los asientos → <K>AsientosConfirmados</K>.</li>
-          <li><b>Captura.</b> <K>PagoCapturado</K> → reserva <S>CONFIRMADA</S> y <K>ReservaConfirmada</K>.</li>
+          <li><b>Captura.</b> <K>PagoCapturado</K> → reserva <S>CONFIRMADA</S> y <K>ReservaConfirmada</K>. Sin respuesta, reintenta con la misma clave (nunca cobra dos veces); si la rechaza, <K>CapturaRechazada</K>: se liberan los asientos y se anula la autorización.</li>
           <li><b>Emisión.</b> <K>TiqueteEmitido</K>. Si falla, no deshace la reserva: reintenta y queda <S>EMISION_FALLIDA</S>.</li>
         </ol>
         <Fig id="9" />
@@ -605,13 +776,13 @@ export const SLIDES = [
           <List items={[
             <><b>Creación:</b> <Code>CLAVE_IDEMPOTENCIA</Code>; misma clave con otro contenido se rechaza.</>,
             <><b>Comandos:</b> <Code>EVENTO_PROCESADO</Code> devuelve la misma respuesta sin repetir efectos.</>,
-            <><b>Apartado:</b> la clave de Valkey lleva el token de la reserva.</>,
+            <><b>Apartado:</b> la clave de Valkey lleva el token de la reserva; un script Lua atómico compara el token antes de crear, renovar o liberar.</>,
             <><b>Pago:</b> clave única ante la pasarela; <Code>EVENTO_PSP</Code> deduplica webhooks.</>,
             <><b>Respuestas tardías:</b> se ignoran o se compensan.</>,
           ]} />
           <div className="callout">
             <div className="callout-v mono">t_restante &gt; timeout_pago + margen</div>
-            <div><b>Regla de tiempos:</b> solo se publica <K>IniciarPago</K> si se cumple; si no, la reserva pasa a <S>EXPIRADA</S>.</div>
+            <div><b>Regla de tiempos:</b> solo se publica <K>IniciarPago</K> si se cumple; si no, la reserva pasa a <S>EXPIRADA</S>. Se compara el tiempo que le <b>queda</b> al apartado, no su duración total.</div>
           </div>
         </div>
       </Cols>
@@ -697,7 +868,7 @@ export const SLIDES = [
           <Fig id="17b" h="30vh" />
         </div>
         <T dense head={['Invariante', 'Cómo se garantiza']} rows={[
-          ['Un asiento no se asigna a dos reservas', 'UPDATE condicional: estado = DISPONIBLE y version = :version, en una transacción. UK (id_vuelo, numero_asiento).'],
+          ['Un asiento no se asigna a dos reservas', 'Verificación previa del token del apartado en Valkey y UPDATE condicional: estado = DISPONIBLE y version = :version, en una transacción. UK (id_vuelo, numero_asiento).'],
           ['Un asiento persistido es DISPONIBLE u OCUPADO', 'El apartado solo existe en Valkey.'],
           ['Una asignación por pasajero y segmento', 'UK (id_segmento, id_pasajero_reserva).'],
           ['Pago, reembolso y millas se aplican una vez', 'UK clave_idempotencia en cada tabla.'],
@@ -741,7 +912,7 @@ export const SLIDES = [
           <h4 className="h4">Cinco cosas vencen, cada una con su mecanismo</h4>
           <List items={[
             <><b>Apartado:</b> TTL de Valkey, automático.</>,
-            <><b>Reserva PENDIENTE:</b> barrido periódico; no expira si hay pago INICIADO o EN_VERIFICACION.</>,
+            <><b>Reserva PENDIENTE:</b> barrido periódico; no expira si su Saga está en el paso de autorización del pago (dato propio de SAGA_RESERVA, sin consultar la base de Pagos).</>,
             <><b>Paso de la Saga:</b> el vigilante reenvía o compensa.</>,
             <><b>Lease de la Saga:</b> otra instancia puede reclamarla.</>,
             <><b>Clave de idempotencia:</b> limpieza periódica.</>,
@@ -753,7 +924,7 @@ export const SLIDES = [
         </div>
         <T head={['Parámetro', 'Valor', 'Nota']} rows={[
           ['TTL_apartado', '10 min', 'fecha_expiracion = ahora + TTL al recibir AsientosApartados.'],
-          ['timeout_paso', '2 s × 2 reenvíos', 'Espera de respuesta a un comando (excepto pago).'],
+          ['timeout_paso', '2 s × 2 reenvíos', 'Espera de respuesta a un comando (excepto pago). Si el retraso del tópico supera ese tiempo, no reenvía y extiende hasta 30 s.'],
           ['timeout_pago', '60 s', 'Espera máxima de la pasarela.'],
           ['margen', '30 s', 'Cubre latencia y reintentos.'],
           ['Vigilante / barrido', '1 s / 30 s', 'Pasos sin respuesta y reservas vencidas.'],
@@ -772,9 +943,9 @@ export const SLIDES = [
           ['Reservas completas', '16 M', '32 GB'],
           ['Asientos vivos en inventario', '45 M filas vivas', '9 GB'],
           ['Pagos, reembolsos y eventos de pasarela', '64 M', '32 GB'],
-          ['Movimientos de millas', '45 M', '14 GB'],
+          ['Movimientos de millas', '41 M (2,8 M redenciones + 38 M acumulaciones)', '13 GB'],
           ['Perfiles (DocumentDB)', '16 M documentos', '64 GB'],
-          ['Eventos en el histórico', '160 M', '160 GB'],
+          ['Mensajes en el histórico (≈ 20 por reserva)', '320 M', '320 GB antes de compresión'],
         ]} />
         <div>
           <div className="timeline">
@@ -784,6 +955,7 @@ export const SLIDES = [
             <div className="hl"><span className="mono">10 años</span>Pagos, reembolsos, millas y sus eventos (Ley 962 de 2005)</div>
           </div>
           <p className="muted">Los datos maestros de vuelos vienen solo de Control de Vuelos; la identidad se valida en el canal. Los datos personales se eliminan o anonimizan a solicitud del titular (Ley 1581).</p>
+          <p className="muted"><b>Borrado criptográfico:</b> en el histórico, los datos personales se cifran con una llave por titular (cifrado de sobre con KMS). Suprimir es destruir la llave: los eventos financieros quedan íntegros y los datos personales, ilegibles.</p>
         </div>
       </Cols>
     ),
@@ -808,7 +980,13 @@ export const SLIDES = [
           </div>
           <div className="seat-arrow" aria-hidden="true">→</div>
           <div className="seat-col">
-            <div className="mono dim">2 · CONFIRMAR (PostgreSQL)</div>
+            <div className="mono dim">2 · VERIFICAR TOKEN (Valkey)</div>
+            <code className="code block">script Lua atómico: GET asiento:14C == &lt;token&gt;</code>
+            <p className="muted">Si el apartado venció o es de otra reserva → <K>ConflictoAsientos</K> sin tocar PostgreSQL. Un pago tardío no le quita el asiento a otro cliente.</p>
+          </div>
+          <div className="seat-arrow" aria-hidden="true">→</div>
+          <div className="seat-col">
+            <div className="mono dim">3 · CONFIRMAR (PostgreSQL)</div>
             <code className="code block">UPDATE asiento SET estado='OCUPADO', version=version+1<br />WHERE id=:id AND estado='DISPONIBLE' AND version=:v</code>
             <p className="muted">0 filas afectadas → relee, reintenta una vez o responde <K>ConflictoAsientos</K>.</p>
           </div>
@@ -822,11 +1000,12 @@ export const SLIDES = [
     body: (
       <T dense head={['Preocupación', 'Estrategia adoptada']} rows={[
         ['Comunicación entre procesos', 'Un solo mecanismo: mensajería asíncrona por Kafka. HTTP solo en el borde.'],
+        ['Sincronización e integridad', 'SET NX PX en un solo comando (no SETNX + EXPIRE); antes de confirmar, script Lua que verifica el token. Cada script toca un solo asiento (compatible con Valkey en modo clúster); el todo o nada lo coordina Inventario.'],
         ['Orden de los mensajes', 'Clave id_reserva: orden y un solo consumidor a la vez por partición. El offset se confirma después de guardar el efecto.'],
         ['Varios asientos y deadlocks', 'Apartado en orden creciente de id_asiento, todo o nada; confirmación en una transacción ordenada. Nadie espera de forma bloqueante a otro servicio.'],
         ['Conflictos de versión', 'Si el CAS afecta 0 filas: relee; si sigue DISPONIBLE y el apartado es propio, reintenta una vez; si no, ConflictoAsientos.'],
         ['Asientos muy disputados', 'Reservas de un mismo vuelo en particiones distintas; la contención la resuelven Valkey y el CAS.'],
-        ['Timeouts y respuestas tardías', 'vence_paso por paso; el vigilante reenvía con el mismo id_comando y tras dos reenvíos compensa.'],
+        ['Timeouts y respuestas tardías', 'vence_paso por paso; el vigilante reenvía con el mismo id_comando y tras dos reenvíos compensa. Control de admisión: si un tópico de comandos acumula > 30 s de retraso, las nuevas reservas reciben 503 temporal.'],
         ['Recuperación entre instancias', 'Kafka reasigna particiones; el vigilante reclama Sagas con CAS sobre version y lease_hasta.'],
         ['Pérdida de datos en Valkey', 'PostgreSQL es la autoridad; solo aumentan los conflictos tardíos. Valkey Multi-AZ.'],
         ['Fallas de consumidores', 'Reintento con espera creciente y luego DLQ para no bloquear la partición.'],
@@ -865,8 +1044,8 @@ export const SLIDES = [
         ['7', 'Cae una instancia de Reservas', 'Kafka reasigna particiones; el vigilante retoma Sagas vencidas.'],
         ['8', 'Mensaje duplicado o fuera de orden', 'EVENTO_PROCESADO descarta duplicados; id_reserva preserva el orden.'],
         ['9', 'Se pierden apartados en Valkey', 'PostgreSQL decide; conflictos tardíos como en 4 y 5.'],
-        ['10', 'Falla la emisión', 'Reserva sigue CONFIRMADA; reintentos; a las 24 h o < 6 h de la salida, cancela y reembolsa.'],
-        ['11', 'Tarifas no responde', 'Cotiza con réplica local de tarifas vigentes (TarifaPublicada).'],
+        ['10', 'Falla la emisión', 'Reserva sigue CONFIRMADA; reintentos y alerta; a las 24 h o < 6 h de la salida (lo revisa el barrido), cancela y reembolsa.'],
+        ['11', 'Tarifas no responde', 'Reservas cotiza con su réplica local de tarifas vigentes (TarifaPublicada) y registra el id_tarifa; la respuesta tardía se ignora.'],
         ['12', 'Fidelización no responde', 'El perfil se degrada; la redención falla (no degradable) y se liberan millas.'],
         ['13', 'Inventario o Pagos detenidos minutos', 'Los comandos esperan en el tópico; las Sagas vencen y compensan.'],
         ['14', 'Falla un consumidor de Kafka', 'Reintentos, DLQ; KEDA ajusta consumidores según el retraso.'],
@@ -889,8 +1068,8 @@ export const SLIDES = [
           <Pill tone="amber">Región</Pill>
           <h4 className="h4">us-east-1 · Norte de Virginia</h4>
           <p>AWS no tiene región en Colombia. Se elige us-east-1 por su catálogo completo de servicios administrados y su conectividad con los GDS; la latencia desde Bogotá (60–120 ms) cabe en el presupuesto.</p>
-          <p className="muted">Se descartó mx-central-1 (menos latencia, menos servicios). La transferencia de datos personales se hace conforme al art. 26 de la Ley 1581, con autorización expresa del titular.</p>
-          <p><b>3 zonas de disponibilidad</b>, centros de datos físicamente separados.</p>
+          <p className="muted">Se descartó mx-central-1 (menos latencia, menos servicios). Alojar los datos en AWS es una <b>transmisión a un encargado</b>: contrato de transmisión del Decreto 1377 de 2013, y EE. UU. figura con nivel adecuado en la Circular 005 de 2017 de la SIC; la autorización del titular se registra en el perfil o en la reserva.</p>
+          <p><b>3 zonas de disponibilidad</b>, centros de datos físicamente separados; contingencia regional en <b>us-west-2</b>.</p>
         </div>
       </Cols>
     ),
@@ -901,10 +1080,10 @@ export const SLIDES = [
       <Cols r="1.25fr 1fr">
         <Fig id="26" />
         <div className="zones">
-          <div><span className="mono">Borde</span>CloudFront, WAF y API Gateway sin estado; reciben el webhook de la pasarela. ALB interno hacia los servicios.</div>
-          <div><span className="mono">Aplicación</span>EKS + Fargate: un Deployment por namespace, pods en 3 zonas. HPA para APIs, KEDA para consumidores. Reservas con ≥ 2 pods activo-activo.</div>
-          <div className="kafka"><span className="mono">Mensajería</span>MSK con 3 brokers (uno por zona), replicación 3, ≥ 12 particiones por tópico de comandos, ACL por tópico.</div>
-          <div><span className="mono">Datos</span>7 bases RDS PostgreSQL Multi-AZ (Pagos con llave KMS dedicada; RDS Proxy para Inventario y Reservas), Valkey con réplica, DocumentDB 1 + 2.</div>
+          <div><span className="mono">Borde</span>CloudFront, WAF y API Gateway sin estado; reciben el webhook de la pasarela. VPC Link hacia el ALB interno.</div>
+          <div><span className="mono">Aplicación</span>EKS + Fargate: un Deployment por namespace, pods en 3 zonas. HPA para APIs, KEDA para consumidores (Deployments separados). Reservas con ≥ 2 pods activo-activo.</div>
+          <div className="kafka"><span className="mono">Mensajería</span>MSK con 3 brokers (uno por zona), replicación 3, ≥ 12 particiones por tópico de comandos, permisos IAM por tópico.</div>
+          <div><span className="mono">Datos</span>7 bases lógicas RDS PostgreSQL Multi-AZ (Pagos con llave KMS dedicada; RDS Proxy para Inventario y Reservas), Valkey con réplica, DocumentDB 1 + 2 compartido por perfil y modelo de lectura.</div>
           <div><span className="mono">Analítica</span>MSK Connect → S3 → Redshift para analítica, auditoría y retención.</div>
           <div><span className="mono">Transversal</span>CloudWatch, X-Ray, Secrets Manager, Parameter Store, AppConfig, GitHub Actions, ECR, Helm, Argo Rollouts, Terraform.</div>
         </div>
@@ -915,20 +1094,20 @@ export const SLIDES = [
     sec: 9, title: 'Dimensionamiento inicial: normal y pico',
     body: (
       <>
-        <T dense head={['Nodo', 'Unidad', 'Normal', 'Pico (121 %)']} rows={[
-          ['Búsqueda de Itinerarios', 'Pod Fargate 1 vCPU · 2 GB', '6 pods', <b className="hi">12 pods</b>],
+        <T dense head={['Nodo', 'Unidad', 'Carga nominal', 'Pico y margen de diseño']} rows={[
+          ['Búsqueda de Itinerarios', 'Pod Fargate 1 vCPU · 2 GB', '7 pods', <b className="hi">12 pods</b>],
           ['Gestión de Reservas', 'Pod Fargate 1 vCPU · 2 GB', '3 pods', '6 pods'],
           ['Inventario de Asientos', 'Pod Fargate 1 vCPU · 2 GB', '3 pods', <b className="hi">8 pods</b>],
           ['Tarifas y Precios', 'Pod Fargate 2 vCPU · 4 GB (cálculo)', '3 pods', '6 pods'],
           ['Pagos, Emisión, Perfil, Notificaciones, Integración', 'Pod Fargate 0,5 vCPU · 1 GB', '2 c/u', '4 c/u'],
-          ['Consumidores de Kafka', 'Pod 0,5 vCPU · 1 GB con KEDA', '1 por servicio', 'hasta # particiones'],
-          ['RDS PostgreSQL (Inventario y Reservas)', 'db.r7g.xlarge, Multi-AZ', '1 + espera + réplica', '+ réplicas de lectura'],
-          ['RDS PostgreSQL (demás)', 'db.r7g.large, Multi-AZ', '1 + espera', 'igual'],
-          ['ElastiCache for Valkey', 'cache.r7g.large, 1 + 2 réplicas', '1 fragmento', '2 fragmentos'],
-          ['Amazon DocumentDB', 'db.r6g.large, 1 + 2 réplicas', '3 instancias', '+ réplicas'],
-          ['Amazon MSK', 'kafka.m7g.large', '3 brokers', '3 brokers'],
+          ['Consumidores de los servicios con API de borde', 'Pod 0,5 vCPU · 1 GB con KEDA', '2 por servicio (3 en Reservas)', 'hasta # particiones'],
+          ['RDS PostgreSQL (Inventario y Reservas)', 'db.r7g.xlarge, Multi-AZ, instancia propia', '1 + espera; Reservas + 1 réplica de lectura', 'réplicas extra antes de la campaña'],
+          ['RDS PostgreSQL (demás)', 'db.r7g.large, Multi-AZ', 'Pagos y Fidelización propias; Tarifas, Emisión y Notificaciones comparten', 'igual'],
+          ['ElastiCache for Valkey', 'cache.r7g.large, modo clúster, 1 + 2 réplicas', '2 fragmentos', 'se amplían antes de la campaña'],
+          ['Amazon DocumentDB', 'db.r6g.large, 1 + 2 réplicas', '3 instancias', '+ réplicas de lectura'],
+          ['Amazon MSK', 'kafka.m7g.large', '3 brokers', '3 brokers (almacenamiento ampliable)'],
         ]} />
-        <p className="note">Estimación inicial que se ajusta con la PoC4. El escalado automático cubre la diferencia entre normal y pico sin intervención manual.</p>
+        <p className="note">La columna de pico dimensiona para la capacidad de diseño (<b>3.000 búsquedas y 30 reservas por segundo</b>), no solo para el 121 %; por eso casi duplica los pods. HPA y KEDA cubren la diferencia; las réplicas de bases y los fragmentos de Valkey, que tardan decenas de minutos, se amplían antes de cada campaña. Inventario y Tarifas no exponen HTTP. Se ajusta con la PoC4.</p>
       </>
     ),
   },
@@ -956,7 +1135,7 @@ export const SLIDES = [
     sec: 9, title: 'Dependencias tecnológicas',
     body: (
       <T dense head={['Tecnología', 'Función', 'Nodo', 'Versión']} rows={[
-        ['Amazon EKS + AWS Fargate', 'Orquestación y escalado', 'Aplicación', 'Kubernetes 1.34'],
+        ['Amazon EKS + AWS Fargate', 'Orquestación y escalado', 'Aplicación', 'Kubernetes 1.35 (soporte estándar)'],
         ['KEDA, Argo Rollouts, Helm, LB Controller', 'Escalado por eventos, canary, empaquetado', 'Aplicación', 'Fijadas en el repo de infra'],
         ['Imagen base', 'SO y entorno', 'Aplicación', 'Node.js 24.22.1 · Debian bookworm-slim'],
         ['TypeScript + NestJS', 'Lenguaje y framework', 'Aplicación', 'TS 6.0.x · NestJS 12.2.0'],
@@ -976,11 +1155,11 @@ export const SLIDES = [
     sec: 9, title: 'Seguridad y cumplimiento',
     body: (
       <Cards cols={3} small items={[
-        { tag: 'Identidad', t: 'Cognito + JWT', d: 'OAuth 2.0/OIDC con perfiles pasajero, agente, administrador y socio. IRSA y RBAC entre servicios.' },
+        { tag: 'Identidad', t: 'Cognito + JWT', d: 'OAuth 2.0/OIDC con perfiles pasajero, agente, administrador y socio; MFA obligatorio para agentes y administradores. IRSA y RBAC entre servicios.' },
         { tag: 'Tránsito', t: 'TLS 1.2+', d: 'En el borde (ACM) y entre servicios, bases y Kafka.' },
         { tag: 'Reposo', t: 'AWS KMS', d: 'Todas las bases, Valkey, Kafka y S3. Pagos con llave dedicada.' },
-        { tag: 'Tarjetas', t: 'PCI-DSS SAQ A', d: 'La pasarela captura la tarjeta; solo se guarda el token. Agentes envían un enlace de pago.', tone: 'amber' },
-        { tag: 'Datos personales', t: 'Ley 1581 de 2012', d: 'Consentimiento y finalidad; consultas en 10 días hábiles, reclamos en 15; registro ante la SIC.', tone: 'amber' },
+        { tag: 'Tarjetas', t: 'PCI-DSS v4.0.1 · comercio Nivel 1', d: 'La pasarela captura la tarjeta y solo se guarda el token; los agentes envían un enlace de pago. Con > 6 M transacciones al año, lo certifica un QSA con un ROC; la página de pago aplica los controles de scripts 6.4.3 y 11.6.1.', tone: 'amber' },
+        { tag: 'Datos personales', t: 'Ley 1581 de 2012', d: 'Consentimiento en el perfil o, para no socios y reservas por GDS, en PASAJERO_RESERVA; consultas en 10 días hábiles, reclamos en 15; bases inscritas en la SIC.', tone: 'amber' },
         { tag: 'Webhooks', t: 'Firma HMAC', d: 'Verificación de firma y deduplicación por id de evento.' },
         { tag: 'Red', t: 'Segmentación', d: 'Subredes privadas; solo CloudFront y API Gateway expuestos.' },
         { tag: 'Secretos', t: 'Secrets Manager', d: 'Rotación automática de credenciales de bases, pasarela y proveedores.' },
@@ -995,9 +1174,10 @@ export const SLIDES = [
         ['Valkey bajo contención de Hot Sale', 'Apartados lentos o perdidos', 'Benchmark PoC1; PostgreSQL sigue siendo la autoridad.'],
         ['Partición de Kafka sobrecargada por un vuelo', 'Retraso en eventos de inventario', 'Monitoreo del retraso; subparticiones.'],
         ['Pasarela lenta o resultado desconocido', 'Pagos en EN_VERIFICACION', 'Verificador, webhook y conciliación manual.'],
+        ['Versiones no disponibles en la región', 'Fallas de instalación', 'Verificar la Tabla 16 contra la región; fijar versiones en Terraform.'],
         ['Activo-activo de Reservas', 'Saga ejecutada dos veces', 'Lease, versión y pasos idempotentes.'],
-        ['Varias tecnologías de datos', 'Sobrecarga de equipo y costo', 'Administrados; agrupar bases lógicas al inicio.'],
-        ['Una sola región', 'Indisponibilidad ante caída regional', 'Respaldos en segunda región; multirregión como evolución.'],
+        ['Varias tecnologías de datos', 'Sobrecarga de equipo y costo', 'Administrados; Tarifas, Emisión y Notificaciones comparten instancia; Pagos propia por su llave KMS.'],
+        ['Una sola región', 'Indisponibilidad ante caída regional', 'Pilot light en us-west-2: RPO ≤ 1 min, RTO ≤ 2 h; multirregión activo-activo como evolución.'],
         ['AWS como proveedor único', 'Costo de salida alto', 'Estándares abiertos e IaC.'],
         ['Certificación EDIFACT/NDC larga', 'Retrasos de integración', 'Validar con los GDS al inicio (PoC3).'],
         ['Acumulación de mensajes en picos', 'Retraso de Saga, emisión y notificaciones', 'KEDA por retraso; alarmas por tópico.'],
@@ -1010,21 +1190,23 @@ export const SLIDES = [
   {
     sec: 10, title: 'Trazabilidad entre requisitos y diseño',
     body: (
-      <T dense head={['Requisito / meta', 'Funcional · info · concurrencia', 'Despliegue', 'Desarrollo', 'Operacional']} rows={[
-        ['Sin doble asignación (M2)', 'Apartado en Valkey + CAS; orden de apartado; transacción única.', 'Valkey y RDS Multi-AZ.', 'Pruebas de concurrencia en cada cambio.', 'No corregir asignaciones sin validar versión.'],
-        ['Disponibilidad 24/7 (M3)', 'Aislamiento de fallos y degradación.', '3 zonas, activo-activo, Multi-AZ.', 'Canary con reversión; migraciones compatibles.', 'SLA 99,9 %, guardia 24/7, RPO/RTO.'],
-        ['Throughput en picos (M3)', 'Búsqueda desacoplada; Saga asíncrona.', 'Escalado por servicio.', 'k6.', 'Alarmas de capacidad.'],
-        ['Consistencia entre servicios', 'Saga, Outbox, idempotencia, < 2 s.', 'MSK replicado.', 'Pruebas de contrato de eventos.', 'Retraso de consumo y DLQ.'],
-        ['Pagos tardíos y reembolsos', 'Regla determinista de compensación.', '—', 'Pruebas de escenarios de falla.', 'Conciliación de EN_VERIFICACION.'],
-        ['LifeMiles (M6)', 'Libro en PostgreSQL; redención en la Saga.', 'DocumentDB y RDS.', '—', 'Respaldo de ambos motores.'],
-        ['EDIFACT y NDC (M4)', 'Modelo canónico y etiqueta de canal.', 'Enlaces con GDS.', 'Contratos de mensajes.', 'Monitoreo de enlaces.'],
-        ['Datos y trazabilidad (M5)', 'Histórico, tokenización, consentimiento.', 'KMS y CloudTrail.', 'Logs sin datos sensibles.', 'Retención de 10 años.'],
-        ['Tarifas sin inactividad (M1)', 'Servicio de Tarifas independiente.', '—', 'Banderas en AppConfig.', 'Cambios por pipeline.'],
+      <T dense head={['Requisito / meta', 'Funcional · info · concurrencia', 'Despliegue', 'Desarrollo', 'Operacional', 'Perspectivas']} rows={[
+        ['Sin doble asignación (M2)', 'Apartado en Valkey + CAS; orden de apartado; transacción única.', 'Valkey y RDS Multi-AZ.', 'Pruebas de concurrencia.', 'No corregir asignaciones sin validar versión.', 'Fallo seguro.'],
+        ['Disponibilidad 24/7 (M3)', 'Aislamiento de fallos y degradación.', '3 zonas, activo-activo, Multi-AZ.', 'Canary con reversión; migraciones compatibles.', 'SLA 99,9 %, guardia 24/7, RPO/RTO.', 'EC3, EC6; disponibilidad (14.1).'],
+        ['Throughput en picos (M3)', 'Búsqueda desacoplada; Saga asíncrona.', 'Escalado por servicio.', 'k6.', 'Alarmas de capacidad.', 'Modelo de desempeño (13.2).'],
+        ['Consistencia entre servicios (M2, M3)', 'Saga, Outbox, idempotencia, < 2 s.', 'MSK replicado.', 'Contratos de eventos.', 'Retraso de consumo y DLQ.', '—'],
+        ['Pagos tardíos y reembolsos (M5)', 'Regla determinista de compensación.', '—', 'Escenarios de falla.', 'Conciliación de EN_VERIFICACION.', '—'],
+        ['Emisión separada de la reserva (M3)', 'Emisión con estados propios.', '—', '—', 'Alarma de EMISION_FALLIDA.', '—'],
+        ['LifeMiles (M6)', 'Libro en PostgreSQL; redención en la Saga.', 'DocumentDB y RDS.', '—', 'Respaldo de ambos motores.', '—'],
+        ['EDIFACT y NDC (M4)', 'Modelo canónico y etiqueta de canal.', 'Enlaces con GDS.', 'Contratos de mensajes.', 'Monitoreo de enlaces.', '—'],
+        ['Datos y trazabilidad (M5)', 'Histórico, tokenización, consentimiento.', 'KMS y CloudTrail.', 'Logs sin datos sensibles.', 'Retención de 10 años.', 'Seguridad (13.1).'],
+        ['Tarifas sin inactividad (M1)', 'Servicio de Tarifas independiente.', '—', 'Banderas en AppConfig.', 'Cambios por pipeline.', 'Puntos de variación (14.2.3).'],
+        ['Operabilidad (M3)', 'Observabilidad y vigilancia de DLQ.', 'CloudWatch y X-Ray.', 'lib-observabilidad.', 'Administración y soporte.', '—'],
       ]} />
     ),
   },
   {
-    sec: 10, title: 'Cobertura TOGAF y gobernanza',
+    sec: 10, title: 'Cobertura de arquitectura empresarial y ADM',
     body: (
       <Cols r="0.9fr 1.1fr">
         <div>
@@ -1037,13 +1219,33 @@ export const SLIDES = [
             <div className="kafka"><span className="mono">Gobernanza</span>Principios, ADR, comité, controles (§1.6, 10.3)</div>
           </div>
         </div>
-        <Cards cols={2} small items={[
-          { tag: 'ADR', t: 'Registro de decisiones', d: 'Contexto, alternativas, decisión, consecuencias y principio. La Tabla 7 es el registro inicial.' },
-          { tag: 'Comité', t: 'Cada dos semanas', d: 'Arquitecto, líderes de Reservas, Inventario y Pagos, operaciones y seguridad.' },
-          { tag: 'Controles', t: 'Automáticos en el pipeline', d: 'Reglas de dependencia, contratos y políticas de infra; revisión trimestral.' },
-          { tag: 'Excepciones', t: 'Con ADR aprobado', d: 'Toda desviación de un principio lleva riesgo y fecha de revisión.' },
-        ]} />
+        <div>
+          <h4 className="h4">Ciclo de vida según el ADM de TOGAF</h4>
+          <T dense head={['Fase del ADM', 'Dónde se cubre']} rows={[
+            ['A · Visión', 'Secciones 1 y 2'],
+            ['B · Negocio', 'Sección 4'],
+            ['C · Datos y aplicaciones', 'Secciones 6 a 8'],
+            ['D · Tecnología', 'Sección 9'],
+            ['E y F · Oportunidades y migración', 'Secciones 5.8 y 12.3'],
+            ['G · Gobierno de la implementación', 'Sección 10.3'],
+            ['H · Gestión del cambio', 'Sección 14.2'],
+          ]} />
+          <p className="muted">Controles de COBIT 2019: APO03 (arquitectura empresarial), BAI03 (soluciones), BAI06 (cambios), DSS02 (incidentes) y DSS04 (continuidad). La operación sigue ITIL.</p>
+        </div>
       </Cols>
+    ),
+  },
+  {
+    sec: 10, title: 'Gobernanza de la arquitectura',
+    body: (
+      <Cards cols={3} small items={[
+        { tag: 'ADR', t: 'Registro de decisiones', d: 'Contexto, alternativas, decisión, consecuencias y principio. La Tabla 7 es el registro inicial; el documento y sus diagramas Mermaid se versionan junto a los ADR.' },
+        { tag: 'Cada dos semanas', t: 'Comité técnico de arquitectura', d: 'Arquitecto, líderes de Reservas, Inventario y Pagos, operaciones y seguridad. Aprueba cambios de principios, contratos o tecnologías.' },
+        { tag: 'Cada trimestre', t: 'Comité de dirección', d: 'Gerencia comercial, cumplimiento, finanzas, dirección de TI y arquitecto. Decide inversiones y el paso de la etapa 1 a la 2.', tone: 'amber' },
+        { tag: 'Controles', t: 'Automáticos en el pipeline', d: 'Reglas de dependencia, contratos y políticas de infraestructura; revisión trimestral de conformidad con los principios.' },
+        { tag: 'Beneficios', t: 'Seguimiento de las metas', d: 'Cada trimestre se revisan M1 a M6 y el costo real frente a la sección 5.8; si una meta no se cumple, ADR con acción correctiva.', tone: 'teal' },
+        { tag: 'Excepciones', t: 'Con ADR aprobado', d: 'Toda desviación de un principio lleva riesgo y fecha de revisión.' },
+      ]} />
     ),
   },
 
@@ -1076,9 +1278,9 @@ export const SLIDES = [
 │   ├── dominio/
 │   ├── casos-uso/
 │   ├── puertos/        entrada/, salida/
-│   ├── adaptadores/    rest, kafka, redis, postgres
-│   ├── configuracion/
-│   ├── main.http.ts
+│   ├── adaptadores/    rest, kafka, valkey, postgres
+│   ├── configuracion/  módulos NestJS
+│   ├── main.http.ts    solo con API de borde
 │   └── main.consumer.ts
 ├── test/   unitarias, integracion, contrato, concurrencia
 ├── migraciones/        TypeORM
@@ -1124,10 +1326,11 @@ export const SLIDES = [
         <div className="zones">
           <div><span className="mono">Repos</span>Uno por servicio, por biblioteca, para contratos y para infraestructura.</div>
           <div><span className="mono">Ramas</span>Trunk-based, ramas cortas; 2 aprobaciones en inventario y reservas.</div>
-          <div><span className="mono">Versiones</span>Conventional Commits y SemVer con release-please.</div>
+          <div><span className="mono">Versiones</span>Conventional Commits y SemVer con release-please. Un contrato incompatible es versión mayor y convive ≥ 90 días, hasta que la telemetría muestre que nadie lo usa.</div>
+          <div><span className="mono">Esquemas</span>Compatibilidad FULL_ALL en comandos, respuestas y eventos; lo incompatible va a un tópico nuevo con sufijo .v2.</div>
           <div><span className="mono">Imágenes</span>Inmutables en ECR, promovidas sin recompilar.</div>
           <div><span className="mono">Entornos</span>Dev, pruebas, staging y producción, cada uno en su cuenta AWS.</div>
-          <div className="kafka"><span className="mono">Producción</span>Canary 1 % → 10 % → 50 % con Argo Rollouts y rollback automático.</div>
+          <div className="kafka"><span className="mono">Producción</span>Canary con Argo Rollouts y rollback automático: HTTP 1 % → 10 % → 50 %; consumidores de Kafka por réplicas (1 pod = 3–4 de 12 particiones, 25–33 %, luego 50 %) con asignación cooperativa.</div>
           <div><span className="mono">Base de datos</span>Migraciones compatibles: esquema primero, código después.</div>
         </div>
         <Fig id="30" />
@@ -1153,7 +1356,9 @@ export const SLIDES = [
             <><b>Madurez DevOps:</b> pipeline e instrumentación desde el primer servicio.</>,
             <><b>Complejidad de la Saga:</b> biblioteca común y pruebas de falla en cada cambio.</>,
             <><b>Event loop bloqueado:</b> worker threads y pruebas al 121 %.</>,
+            <><b>Valkey bajo contención:</b> benchmark de SET NX PX, TTL y CAS (PoC1).</>,
             <><b>Divergencia de contratos:</b> registro de esquemas, pruebas de contrato, SemVer.</>,
+            <><b>Activo-activo de Reservas:</b> Saga y Outbox en la primera iteración.</>,
             <><b>Obsolescencia:</b> revisión semestral y Dependabot.</>,
           ]} />
         </div>
@@ -1173,27 +1378,31 @@ export const SLIDES = [
             'Ambientes separados en cuentas de AWS distintas.',
             'Imágenes inmutables; se registra commit, imagen y configuración.',
             'Despliegue independiente por microservicio.',
-            <>Canary en Reservas, Inventario y Pagos: <b>1 % → 10 % → 50 %</b>, 10 min por paso.</>,
+            <>Canary en Reservas, Inventario, Tarifas y Pagos, 10 min por paso: <b>1 % → 10 % → 50 %</b> del tráfico HTTP; en consumidores de Kafka, <b>25–33 % → 50 %</b> de las particiones.</>,
             'Reversión automática ante errores, latencia o health checks fallidos.',
             'Migraciones compatibles hacia atrás.',
+            <><b>Presupuesto de errores:</b> disponibilidad medida con monitoreo sintético; al consumir el 75 % de los 43,8 min se congelan las liberaciones que no corrigen fallas.</>,
           ]} />
         </div>
       </Cols>
     ),
   },
   {
-    sec: 12, title: 'Migración gradual: strangler fig por lotes de vuelos',
+    sec: 12, title: 'Migración por etapas frente a Altéa',
     body: (
-      <Cols r="1.25fr 0.85fr">
+      <Cols r="0.9fr 1.2fr">
         <Fig id="32" />
         <div>
-          <Lead>Para cada vuelo existe en todo momento <b>un único sistema autoritativo</b> de su inventario (P1).</Lead>
-          <p>La Capa de Integración y el API Gateway enrutan cada solicitud al sistema autoritativo para el vuelo consultado.</p>
+          <Cards cols={2} small items={[
+            { tag: 'Etapa 1', t: 'Todo menos el inventario', d: 'Canales, postventa, pagos y fidelización pasan al sistema nuevo. Inventario de Asientos funciona como adaptador que aparta y confirma en Altéa por sus interfaces; el resto de la Saga no cambia.', tone: 'teal' },
+            { tag: 'Etapa 2', t: 'Strangler fig por lotes de vuelos', d: 'La autoridad del inventario pasa al sistema nuevo lote a lote. Para cada vuelo existe en todo momento un único sistema autoritativo (P1).', tone: 'amber' },
+          ]} />
+          <p><b>Sin CDC sobre Altéa:</b> como lo aloja Amadeus, toda sincronización usa sus interfaces (EDIFACT o sus API). El CDC solo se usa con la plataforma propia de LifeMiles. Altéa conserva siempre el check-in y el control de salidas.</p>
           <div className="callout">
             <div className="callout-v">≈ 5 M reservas</div>
-            <div>con vuelos futuros. Cada lote se copia y verifica en &lt; 10 min; al menos tres ensayos completos en staging con datos anonimizados.</div>
+            <div>con vuelos futuros (la mayoría en los próximos cuatro meses). Cada lote se copia y verifica en &lt; 10 min; al menos tres ensayos completos en staging con una copia anonimizada.</div>
           </div>
-          <p className="muted"><b>Reversión:</b> la autoridad del lote vuelve al legado y las reservas nuevas se replican con CDC inversa, mientras el legado siga en operación (hasta la fase 5).</p>
+          <p className="muted"><b>Itinerarios mixtos:</b> los lotes se arman por pares de ruta y conexiones frecuentes; si una reserva combina un vuelo migrado y otro no, la Capa de Integración coordina una Saga con dos participantes. <b>Reversión:</b> la autoridad del lote vuelve a Altéa y las reservas nuevas se reenvían por sus interfaces, mientras Altéa conserve la venta (hasta la fase 5).</p>
         </div>
       </Cols>
     ),
@@ -1205,7 +1414,7 @@ export const SLIDES = [
         <div className="panel">
           <Pill tone="teal">Backend</Pill>
           <List items={[
-            <><b>OpenTelemetry:</b> el trace_id viaja en las cabeceras de cada comando y evento; una Saga completa es una sola traza.</>,
+            <><b>OpenTelemetry:</b> el trace_id viaja en las cabeceras de cada comando y evento; una Saga completa es una sola traza. Sin DaemonSets en Fargate, el colector ADOT corre como sidecar y los logs salen por Fluent Bit.</>,
             <><b>CloudWatch:</b> logs, métricas, paneles y alarmas.</>,
             <><b>X-Ray:</b> recorrido entre servicios y cuellos de botella.</>,
             <><b>Probes</b> de liveness y readiness.</>,
@@ -1230,20 +1439,25 @@ export const SLIDES = [
     sec: 12, title: 'Mantenimiento y condiciones de error',
     body: (
       <Cols r="0.85fr 1.15fr">
-        <T dense head={['Frecuencia', 'Tarea']} rows={[
-          ['Diaria', 'DLQ; conciliar EN_VERIFICACION y reembolsos FALLIDO; verificar respaldos; EMISION_FALLIDA y GuardDuty.'],
-          ['Semanal', 'Tendencias de latencia y retraso; parches de Dependabot.'],
-          ['Mensual', 'Probar restauración y medir RTO; costos y capacidad; permisos IAM.'],
-          ['Semestral', 'Revisar versiones y planificar actualizaciones mayores.'],
-          ['Antes de campañas', 'Prueba de carga al 121 % y aumento preventivo de capacidad.'],
-        ]} />
+        <div>
+          <T dense head={['Frecuencia', 'Tarea']} rows={[
+            ['Diaria', 'DLQ; conciliar EN_VERIFICACION y reembolsos FALLIDO; verificar respaldos; EMISION_FALLIDA y GuardDuty.'],
+            ['Semanal', 'Tendencias de latencia y retraso; parches de Dependabot.'],
+            ['Mensual', 'Probar restauración y medir RTO; costos y capacidad; permisos IAM.'],
+            ['Semestral', 'Revisar versiones (Kubernetes antes del fin de su soporte en EKS); simulacro regional con el pilot light.'],
+            ['Antes de campañas', 'Prueba de carga al 121 % y aumento preventivo de capacidad.'],
+          ]} />
+          <p className="muted">Sin cerrar el servicio: ventanas de AWS de 02:00 a 05:00 (hora de Colombia) con conmutación Multi-AZ de 1–2 min, PostgreSQL mayor con azul/verde de RDS y congelamiento de cambios desde 48 h antes de cada campaña. Por eso el SLA no excluye el mantenimiento.</p>
+        </div>
         <T dense head={['Condición observada', 'Causa probable', 'Acción']} rows={[
           ['Más FALLIDA por ASIENTO_NO_DISPONIBLE', 'Pérdida de apartados o contención', 'Revisar ElastiCache; confirmar que no hay doble asignación.'],
           ['Pagos acumulados en EN_VERIFICACION', 'Pasarela lenta o caída', 'Verificar pasarela; activar conciliación.'],
           ['Retraso de consumo creciente', 'Consumidor lento o pico', 'Escalar consumidor; revisar DLQ.'],
           ['Sagas en REQUIERE_INTERVENCION', 'Compensación incompleta', 'Completar a mano con doble aprobación.'],
+          ['Sagas con paso vencido en aumento', 'Participante detenido o tópico con retraso', 'Revisar el retraso y la salud del servicio; verificar que KEDA escaló.'],
           ['Conmutación de una base', 'Falla de zona o del primario', 'Verificar reconexión y retraso de réplica.'],
           ['429 masivo en el Gateway', 'Abuso o límite mal calibrado', 'Revisar reglas de WAF y límites.'],
+          ['Tiquetes en EMISION_FALLIDA', 'Falla de Emisión o de un vecino', 'Reintentar; si persiste, escalar a N3.'],
         ]} />
       </Cols>
     ),
@@ -1263,15 +1477,17 @@ export const SLIDES = [
         </div>
         <div>
           <T dense head={['Indicador', 'Meta']} rows={[
-            ['Disponibilidad de reservas', '99,9 % mensual, sin exclusiones'],
+            ['Disponibilidad de reservas', '99,9 % mensual, sin exclusiones por mantenimiento'],
             ['Búsqueda', 'p95 ≤ 2 s'],
-            ['Creación de reserva', 'p95 ≤ 3 s (sin autorización externa)'],
+            ['Creación de reserva', 'p95: 202 ≤ 1 s; apartado visible ≤ 3 s (sin autorización externa)'],
             ['Propagación de eventos', 'p99 < 2 s'],
             ['Incidente P1', 'Acuse ≤ 15 min · act. 30 min · recuperación ≤ 4 h'],
+            [<b className="hi">Restauración de la venta tras un P1</b>, '≤ 30 min (reversión, conmutación o modo solo consulta)'],
             ['Incidente P2', 'Acuse ≤ 30 min · act. 60 min · recuperación ≤ 8 h'],
             ['Incidente P3', 'Acuse ≤ 4 h · resolución ≤ 3 días hábiles'],
             ['Incidente P4', 'Acuse ≤ 1 día hábil'],
           ]} />
+          <p className="muted">El SLA cubre canales propios y GDS y absorbe las fallas de AWS dentro de la región. Solo se excluyen, y se reportan aparte, las caídas de proveedores externos (pasarela, GDS, correo y SMS) y la pérdida total de la región (rige el RTO del pilot light).</p>
           <p className="muted">N1 mesa de servicio registra y clasifica; N2 Operaciones TI diagnostica, revierte y concilia; N3 desarrollo corrige y analiza la causa raíz. Un P2 sin resolver en 2 h pasa a N3.</p>
         </div>
       </Cols>
@@ -1286,21 +1502,22 @@ export const SLIDES = [
           <div className="zones">
             <div><span className="mono">Infraestructura</span>Terraform + PR con plan revisado</div>
             <div><span className="mono">Tiempos</span>Parameter Store; validación al arrancar</div>
-            <div><span className="mono">Banderas</span>AppConfig con despliegue gradual</div>
+            <div><span className="mono">Banderas</span>AppConfig con despliegue gradual: recargos, canales, degradación y modo solo consulta (<Code>venta_suspendida</Code>)</div>
             <div><span className="mono">Secretos</span>Secrets Manager con rotación</div>
             <div><span className="mono">Resiliencia</span>PR con evidencia de carga</div>
           </div>
-          <p className="muted">Copias con AWS Backup, cifradas con KMS y replicadas a <b>us-west-2</b>.</p>
+          <p className="muted">Copias con AWS Backup, cifradas con KMS y replicadas a <b>us-west-2</b>, donde el pilot light cubre la pérdida de la región (14.1.4).</p>
         </div>
         <T dense head={['Dato', 'Mecanismo', 'RPO', 'RTO']} rows={[
-          ['PostgreSQL críticas (Reservas, Inventario, Pagos, Fidelización)', 'Multi-AZ síncrono, PITR, instantánea diaria a 2.ª región', '0 (zona) · ≤ 5 min', '≤ 2 min · ≤ 1 h'],
-          ['Demás PostgreSQL', 'PITR e instantánea diaria', '≤ 5 min', '≤ 2 h'],
-          ['DocumentDB: perfil', 'Réplicas en 3 zonas, PITR', '≤ 5 min', '≤ 2 h'],
+          ['PostgreSQL críticas (Reservas, Inventario, Pagos, Fidelización)', 'Multi-AZ síncrono, PITR, instantánea diaria, réplica de lectura en la 2.ª región', '0 (zona) · ≤ 5 min (corrupción)', '≤ 2 min · ≤ 1 h'],
+          ['Demás PostgreSQL', 'PITR, instantánea diaria y réplica en la 2.ª región', '≤ 5 min', '≤ 2 h'],
+          ['DocumentDB: perfil', 'Réplicas en 3 zonas, PITR; clúster global con secundario en la 2.ª región', '≤ 5 min', '≤ 2 h'],
           ['DocumentDB: modelo de lectura', 'Se reconstruye desde eventos', 'derivado', '≤ 4 h'],
           ['Valkey', 'No se respalda: temporal', '—', '≤ 5 min'],
           ['Kafka (MSK)', 'RF 3, 7 días, copia continua a S3', '0 (zona)', '≤ 1 h'],
           ['Histórico (S3)', 'Versionado y replicación regional', '≤ 15 min', '≤ 24 h'],
-          [<b className="hi">Pérdida de la región</b>, 'Copias en 2.ª región + Terraform', '≤ 24 h', '≤ 24 h (aceptado)'],
+          ['Configuración e infraestructura', 'Git y Terraform', '0', '≤ 4 h por ambiente'],
+          [<b className="hi">Pérdida de la región</b>, 'Pilot light: réplicas entre regiones, DocumentDB global, MSK Replicator; cómputo al conmutar', <b className="hi">≤ 1 min</b>, <b className="hi">≤ 2 h para la venta</b>],
         ]} />
       </Cols>
     ),
@@ -1316,9 +1533,14 @@ export const SLIDES = [
           ['Suplantación', 'Robo de credenciales de agente; relleno de credenciales en LifeMiles', 'Cognito con MFA para agentes; WAF contra bots; bloqueo por intentos'],
           ['Manipulación', 'El cliente altera el precio', 'El precio siempre lo calcula Tarifas; el cliente envía solo la oferta'],
           ['Manipulación', 'Webhook falso de la pasarela', 'Firma HMAC y consulta de confirmación'],
+          ['Suplantación', 'Mensajes falsos de un supuesto GDS o socio', 'TLS mutuo con certificado por socio y lista de IP autorizadas'],
+          ['Suplantación', 'Pruebas masivas de tarjetas robadas (card testing)', '3-D Secure y antifraude de la pasarela; límite de intentos por reserva e IP'],
           ['Repudio', 'Un agente niega una cancelación', 'Eventos inmutables con el actor; CloudTrail'],
           ['Divulgación', 'Datos personales en logs', 'Logs enmascarados; KMS; sin tarjetas'],
+          ['Divulgación', 'Consultar reservas ajenas probando localizadores', 'Localizador + apellido o sesión; localizadores no secuenciales; límite de tasa'],
           ['Denegación de servicio', 'Ráfaga de búsquedas en Hot Sale', 'WAF, límite por cliente, escalado de Búsqueda'],
+          ['Denegación de servicio', 'Bots que apartan asientos sin pagar (seat spinning)', 'Límite de apartados por cliente y medio de pago; CAPTCHA; reglas de WAF'],
+          ['Elevación de privilegios', 'Un agente emite reembolsos a su favor', 'Doble aprobación sobre un umbral y registro del actor'],
           ['Elevación de privilegios', 'Servicio comprometido accede a Pagos', 'IRSA, RBAC por namespace, security groups for pods'],
         ]} />
       </>
@@ -1329,10 +1551,10 @@ export const SLIDES = [
     body: (
       <Cols r="0.9fr 1.1fr">
         <Cards cols={1} small items={[
-          { tag: 'Táctica', t: 'Menor privilegio', d: 'Un rol IAM por servicio con acceso solo a su base, tópicos (ACL) y secretos; acceso administrativo temporal y auditado.' },
-          { tag: 'Táctica', t: 'Defensa en profundidad', d: 'CloudFront + WAF → Gateway → autorización por servicio → ACL de Kafka → grupos de seguridad → KMS → CloudTrail.' },
+          { tag: 'Táctica', t: 'Menor privilegio', d: 'Un rol IAM por servicio con acceso solo a su base, sus tópicos (permisos IAM por tópico) y sus secretos; acceso administrativo temporal y auditado.' },
+          { tag: 'Táctica', t: 'Defensa en profundidad', d: 'CloudFront + WAF → Gateway → autorización por servicio → permisos por tópico → grupos de seguridad → KMS → CloudTrail.' },
           { tag: 'Táctica', t: 'Fallo seguro', d: 'Si la redención, el token o la confirmación fallan, se rechaza. Un pago desconocido nunca confirma.', tone: 'amber' },
-          { tag: 'Táctica', t: 'Separación de responsabilidades', d: 'Solo Pagos habla con la pasarela; correcciones manuales con doble aprobación.' },
+          { tag: 'Táctica', t: 'Separación de responsabilidades', d: 'Solo Pagos habla con la pasarela y usa comandos.pagos; correcciones manuales con doble aprobación; desarrollo sin acceso a producción.' },
         ]} />
         <T dense head={['Hallazgo', 'Mejora incorporada']} rows={[
           ['El Gateway era el único control de borde frente a bots', 'CloudFront y AWS WAF delante del Gateway'],
@@ -1350,16 +1572,17 @@ export const SLIDES = [
     body: (
       <Cols r="0.85fr 1.15fr">
         <div>
-          <Stats items={[
-            { v: '3.000', l: 'búsquedas / s', s: 'pico de diseño' },
-            { v: '30', l: 'reservas / s', s: 'pico de diseño' },
+          <T dense head={['Carga', 'Búsquedas / s', 'Reservas / s']} rows={[
+            ['Nominal (hora pico × 5 en campaña)', '1.850', '6'],
+            ['Pico Hot Sale (121 %, EC1)', '2.240', '7,3'],
+            [<b className="hi">Capacidad de diseño</b>, <b className="hi">3.000</b>, <b className="hi">30</b>],
           ]} />
           <List items={[
             <><b>Responsividad:</b> búsqueda ≤ 2 s; 202 ≤ 1 s; apartado visible ≤ 3 s (p95).</>,
             <><b>Turnaround:</b> tiquete ≤ 30 s tras confirmar; reembolso solicitado ≤ 1 min.</>,
             <><b>Predictibilidad:</b> p99 ≤ 2 × p95.</>,
           ]} />
-          <p className="muted"><b>Carga:</b> 16 M reservas/año ≈ 44.000/día; hora pico 10 % → 1,2 reservas/s; relación 300:1 → 370 búsquedas/s; campaña ×5 +21 % ≈ 1.850/s. Un pod de Búsqueda ≈ 300 consultas/s → 10 pods + 20 % = 12.</p>
+          <p className="muted"><b>Modelo:</b> 16 M reservas/año ≈ 44.000/día; hora pico 10 % → 1,2 reservas/s; relación 300:1 → 370 búsquedas/s; concentración ×5 en campaña → nominal. El margen en reservas cubre las ráfagas de los GDS. Un pod de Búsqueda ≈ 300 consultas/s → 10 pods + 20 % = 12. Relación 300:1 y factor 5 son supuestos a validar.</p>
         </div>
         <Fig id="34" />
       </Cols>
@@ -1387,33 +1610,167 @@ export const SLIDES = [
     ),
   },
 
-  /* ───────────────────────── 14. CIERRE ───────────────────────── */
+  /* ───────────────────────── 14. DISPONIBILIDAD Y EVOLUCIÓN ───────────────────────── */
   {
-    sec: 14, title: 'Supuestos externos y riesgos aceptados',
+    sec: 14, title: 'Clases de servicio y modos de operación',
+    kicker: '14.1 Disponibilidad y resiliencia',
     body: (
-      <Cols>
+      <Cols r="1.05fr 1fr">
         <div>
-          <h4 className="h4">Tres condiciones que el equipo no controla</h4>
-          <Cards cols={1} small items={[
-            { tag: 'Supuesto 1', t: 'La pasarela separa autorización y captura', d: 'Y entrega webhooks firmados. Si no, la compensación es un reembolso.' },
-            { tag: 'Supuesto 2', t: 'La pasarela aloja la captura de la tarjeta', d: 'El sistema nunca recibe el número de tarjeta.' },
-            { tag: 'Supuesto 3', t: 'Los GDS esperan el resultado de la Saga', d: 'Dentro de su sesión. Se comprueba con la PoC3.' },
+          <T dense head={['Clase', 'Funciones', 'Objetivo', 'Modo degradado']} rows={[
+            [<b className="hi">A · Crítica para la venta</b>, 'Búsqueda, creación y pago (Reservas, Inventario, Tarifas, Pagos), Gateway e Integración', '99,9 %', 'Tarifas caído: réplica local. Pasarela lenta: EN_VERIFICACION. Falla prolongada de MSK, Inventario o Reservas: modo solo consulta.'],
+            ['B · Posventa necesaria', 'Emisión, cancelación y reembolso, redención con millas', '99,5 %', 'Emisión diferida hasta 24 h; reembolsos encolados. La redención no se degrada: solo se vende con dinero.'],
+            ['C · Complementaria', 'Perfil, notificaciones, acumulación de millas, ingesta analítica', '99 %', 'Se omite o se difiere: los eventos esperan en Kafka.'],
           ]} />
+          <p className="note">La integridad del asiento y del saldo de millas <b>no se degrada en ninguna clase</b>: si no puede garantizarse, se rechaza (fallo seguro). El modo solo consulta lo activa la bandera <Code>venta_suspendida</Code> de AppConfig, para todo el sistema o solo un vuelo, ruta o canal: las nuevas reservas reciben 503 y la búsqueda sigue respondiendo.</p>
         </div>
+        <Fig id="35" />
+      </Cols>
+    ),
+  },
+  {
+    sec: 14, title: 'Modelo de disponibilidad y presupuesto de indisponibilidad',
+    kicker: '14.1.2',
+    body: (
+      <Cols r="0.95fr 1.05fr">
         <div>
-          <h4 className="h4">Riesgos aceptados explícitamente</h4>
-          <Cards cols={1} small items={[
-            { t: 'Complejidad operativa de los microservicios', d: 'Mitigada con servicios administrados y automatización.', tone: 'red' },
-            { t: 'AWS como proveedor único', d: 'Mitigada con Kafka, PostgreSQL, API de MongoDB y Kubernetes.', tone: 'red' },
-            { t: 'Hasta 2 s de consistencia eventual en la búsqueda', d: 'La reserva siempre verifica en Inventario.', tone: 'red' },
-            { t: 'Hasta 24 h de datos ante la caída total de la región', d: 'Copias en una segunda región.', tone: 'red' },
+          <div className="callout">
+            <div className="callout-v">99,68 %</div>
+            <div>Producto de los SLA de AWS en el camino de una reserva (CloudFront, API Gateway, Fargate, MSK, RDS y ElastiCache): ≈ 140 min al mes. El 99,9 % <b>no se respalda con contratos</b>; se demuestra midiendo de extremo a extremo.</div>
+          </div>
+          <p><b>A = MTBF / (MTBF + MTTR).</b> Con MTTR de 4 h, el 99,9 % exige un MTBF de 3.996 h (≈ 166 días sin fallas totales); con MTTR de 30 min baja a 500 h (≈ 21 días). La disponibilidad se gana <b>reduciendo el tiempo de reparación</b>; por eso el SLA separa la restauración de la venta (≤ 30 min) de la causa raíz (≤ 4 h).</p>
+          <p className="muted">Un P1 de 30 min consume el 68 % del presupuesto del mes; dos P1 rompen el SLA. Al consumir el 75 % se congelan las liberaciones que no corrigen fallas.</p>
+        </div>
+        <T dense head={['Causa', 'Frecuencia', 'Impacto', 'Min/mes']} rows={[
+          ['Conmutación Multi-AZ de una base crítica', '2 al mes', '1,5 min de escrituras rechazadas', '3'],
+          ['Conmutación de Valkey o de un broker', '1 al mes', '< 1 min con reintentos', '1'],
+          ['Versión defectuosa detenida por el canary', '2 al mes', '10 min sobre ≤ ⅓ del tráfico', '6,6'],
+          ['Caída de una zona', '1 al año', '≤ 2 min (EC3)', '0,2'],
+          ['Incidente P1 que detiene la venta', '1 por trimestre', '≤ 30 min', '10'],
+          [<b>Total estimado</b>, '', '', <b>20,8</b>],
+          [<b className="hi">Reserva</b>, 'Fallas de AWS y no previstas', '', <b className="hi">23,0</b>],
+        ]} />
+      </Cols>
+    ),
+  },
+  {
+    sec: 14, title: 'Tácticas de disponibilidad y hallazgos',
+    kicker: '14.1.3 · 14.1.5',
+    body: (
+      <Cols r="0.9fr 1.1fr">
+        <Cards cols={1} small items={[
+          { tag: 'Táctica', t: 'Clustering y failover', d: 'Pods en tres zonas; Reservas activo-activo con lease; RDS Multi-AZ con Proxy; Valkey y DocumentDB con dos réplicas; MSK con RF 3 y min ISR 2. Ninguna falla de zona requiere intervención humana.' },
+          { tag: 'Táctica', t: 'Registro de transacciones', d: 'WAL de PostgreSQL (PITR ≤ 5 min), Outbox, 7 días de Kafka y copia en S3. Por la idempotencia, reproducir eventos no duplica cobros, asientos ni millas.' },
+          { tag: 'Táctica', t: 'Cronograma de disponibilidad', d: 'Campañas, temporadas altas e irregularidades valen más: congelamiento 48 h antes y capacidad mínima elevada; mantenimiento de 02:00 a 05:00.' },
+          { tag: 'Táctica', t: 'Aislamiento y degradación', d: 'Solo Kafka entre servicios; consumidores separados de HTTP; circuit breaker hacia pasarela y GDS; banderas para los modos de operación.' },
+        ]} />
+        <T dense head={['Hallazgo', 'Mejora incorporada']} rows={[
+          ['Un P1 podía durar 4 h, pero el mes solo admite 43,8 min', 'Restauración de la venta ≤ 30 min; las 4 h quedan para la causa raíz'],
+          ['Los SLA de AWS dan 99,68 % y no había regla de protección', 'Disponibilidad medida de extremo a extremo y presupuesto de errores'],
+          ['Una falla prolongada acumulaba reservas PENDIENTE', 'Modo solo consulta con venta_suspendida'],
+          ['Perder la región era perder 24 h de datos y de venta', 'Pilot light: RPO ≤ 1 min y RTO ≤ 2 h, con simulacro semestral'],
+          ['Las versiones mayores de PostgreSQL reinician la base', 'Despliegues azul/verde de RDS fuera de campañas'],
+          ['Mantenimiento y liberaciones podían coincidir con campañas', 'Ventanas de 02:00 a 05:00 y congelamiento de 48 h'],
+        ]} />
+      </Cols>
+    ),
+  },
+  {
+    sec: 14, title: 'Recuperación ante desastres: pilot light en us-west-2',
+    kicker: '14.1.4',
+    body: (
+      <Cols r="1.1fr 1fr">
+        <Fig id="36" />
+        <div>
+          <Lead>Cada día sin vender son ≈ 16 M USD. Los <b>datos y la mensajería</b> se mantienen replicados en marcha; solo el <b>cómputo</b>, lo más costoso, se escala al declarar el desastre.</Lead>
+          <List items={[
+            <><b>PostgreSQL:</b> réplica de lectura entre regiones por instancia, con segundos de retraso.</>,
+            <><b>DocumentDB:</b> clúster global con secundario en us-west-2.</>,
+            <><b>Kafka:</b> MSK Replicator copia tópicos y posiciones de los consumidores.</>,
+            <><b>S3:</b> Replication Time Control, ≤ 15 min.</>,
+            <><b>Llaves:</b> KMS multirregión desde el inicio (una llave existente no se convierte).</>,
+            <><b>Identidad:</b> Cognito no replica: grupo sincronizado; tras conmutar, los pasajeros entran con un código por correo.</>,
+            <><b>Listos en cero:</b> EKS con réplicas en 0, API Gateway, WAF, Valkey vacío, RDS Proxy, DNS privados, cuotas ampliadas e IP autorizadas por Amadeus, Sabre y la pasarela.</>,
           ]} />
         </div>
       </Cols>
     ),
   },
   {
-    sec: 14, title: 'Glosario esencial',
+    sec: 14, title: 'Procedimiento de conmutación regional y tiempos',
+    kicker: '14.1.4',
+    body: (
+      <Cols r="1.2fr 0.8fr">
+        <ol className="steps">
+          <li><b>Declarar el desastre</b> si la región no responde por más de 30 min sin fecha de recuperación del proveedor. <span className="mono dim">30 min</span></li>
+          <li><b>Promover</b> las réplicas de RDS y el secundario de DocumentDB a primarios, en paralelo. <span className="mono dim">≤ 15 min</span></li>
+          <li><b>Escalar los pods</b> desde cero hasta la carga nominal, en paralelo con el paso 2. <span className="mono dim">≤ 15 min</span></li>
+          <li><b>Reconciliar el inventario</b> antes de abrir: todo asiento con asignación confirmada, tiquete o evento de confirmación replicado se marca OCUPADO; las PENDIENTE de la ventana perdida se cancelan y sus autorizaciones se anulan; las confirmadas en el último minuto se reconstruyen desde la pasarela, los tiquetes y las notificaciones. <span className="mono dim">≤ 30 min</span></li>
+          <li><b>Cambiar el origen</b> de CloudFront (o DNS con Route 53 ARC) hacia us-west-2 y abrir la venta gradualmente. <span className="mono dim">≤ 15 min</span></li>
+        </ol>
+        <div>
+          <Stats items={[
+            { v: '≈ 90 min', l: 'en total', s: 'RTO de la venta ≤ 2 h' },
+            { v: '≤ 1 min', l: 'de datos perdidos', s: 'RPO; alarma de replicación a 60 s' },
+          ]} />
+          <p className="muted">La conmutación es una decisión del procedimiento, no automática: el origen de respaldo de CloudFront solo conmuta GET y lo haría ante cualquier error. El retorno a us-east-1 es planificado, en sentido inverso y en una ventana de bajo tráfico.</p>
+          <p className="muted"><b>Límite:</b> no es activo-activo; durante la contingencia hay una sola región activa. El costo agrega réplicas, DocumentDB secundario, un MSK pequeño, el plano de control de EKS y la transferencia entre regiones.</p>
+        </div>
+      </Cols>
+    ),
+  },
+  {
+    sec: 14, title: 'Perspectiva de evolución: cambios previstos',
+    kicker: '14.2 Evolución',
+    body: (
+      <>
+        <T dense head={['Cambio', 'Dimensión', 'Magnitud', 'Probabilidad', 'Plazo', 'Respuesta del diseño']} rows={[
+          ['Tarifas por tallas y complementarios', 'Funcional', 'Media', 'Alta', '6–12 meses', 'Tarifas aislado; reglas en AppConfig; eventos con contrato compatible.'],
+          ['Inventario por clase de reserva', 'Funcional', 'Alta (P1)', 'Media', '1–2 años', 'Se difiere; la hexagonal lo aísla en Inventario; exige un ADR.'],
+          ['Mezcla EDIFACT/NDC o nueva versión de NDC', 'Entorno', 'Baja', 'Alta', 'Meses', 'Adaptadores por protocolo, modelo canónico y bandera de canales.'],
+          ['Venta de aliados de Star Alliance', 'Entorno', 'Media', 'Media', '1–2 años', 'Nuevo adaptador; la Saga y la integridad no cambian.'],
+          ['Otra pasarela de pagos', 'Entorno', 'Media', 'Media', '1–2 años', 'Puerto de pasarela en Pagos.'],
+          ['Actualizaciones de plataforma', 'Plataforma', 'Baja, frecuentes', 'Segura', 'Continua', 'Revisión semestral, imágenes inmutables, azul/verde, Terraform.'],
+          ['Multirregión activo-activo', 'Plataforma', 'Alta', 'Baja a media', '2–3 años', 'Se difiere; pilot light y Terraform por región preparan el camino.'],
+          ['Cambio de proveedor de nube', 'Plataforma', 'Muy alta', 'Baja', 'Indefinida', 'No se abstrae; estándares abiertos reducen el costo de salida.'],
+          ['Cambios regulatorios', 'Entorno', 'Baja a media', 'Media', 'Anual', 'Tarjetas fuera del sistema; consentimiento; lib-seguridad.'],
+        ]} />
+        <p className="note"><b>Tradeoff:</b> se paga la flexibilidad desde el inicio cuando el cambio es probable y adaptarlo después sería caro (P2, P9, adaptadores, puertos hexagonales); se difiere cuando es improbable o cuesta más de lo que ahorra (multirregión activo-activo, que rediseñaría la autoridad única del inventario, e independencia de la nube, que renunciaría a los administrados).</p>
+      </>
+    ),
+  },
+  {
+    sec: 14, title: 'Puntos de variación y hallazgos de evolución',
+    kicker: '14.2.3 · 14.2.4',
+    body: (
+      <Cols r="1.1fr 0.9fr">
+        <T dense head={['Punto de variación', 'Mecanismo', 'Qué cambia sin reescribir']} rows={[
+          ['Adaptadores de Integración', 'Modelo canónico, un adaptador por protocolo', 'Un GDS, una versión de NDC o un aliado'],
+          ['Puerto de pasarela', 'Hexagonal en Pagos', 'Una pasarela o medio de pago'],
+          ['Puertos de persistencia', 'Hexagonal en cada servicio', 'El motor de datos de un servicio'],
+          ['Suscripción a eventos', 'Publicación/suscripción en Kafka', 'Funciones nuevas como consumidores'],
+          ['Contratos versionados', 'Registro de esquemas FULL_ALL', 'Campos y eventos nuevos'],
+          ['Reglas y banderas', 'AWS AppConfig', 'Recargos, canales y modos degradados'],
+          ['Parámetros', 'Parameter Store', 'TTL, timeouts, reintentos, circuit breaker'],
+          ['Infraestructura', 'Terraform por ambiente y región', 'Ambientes y región de contingencia'],
+        ]} />
+        <div>
+          <h4 className="h4">Hallazgos y mejoras</h4>
+          <List items={[
+            <><b>Modo de compatibilidad sin fijar</b> → FULL_ALL, porque productores y consumidores se despliegan en cualquier orden y el histórico se reproduce años después.</>,
+            <><b>Convivencia de versiones sin plazo</b> → ≥ 90 días y hasta que nadie use la anterior.</>,
+            <><b>Documento y ADR podían divergir</b> → se versionan juntos; cada ADR actualiza su sección.</>,
+            <><b>Kubernetes podía salir del soporte de EKS</b> → la revisión semestral planifica su actualización.</>,
+          ]} />
+          <p className="muted"><b>Preservación del conocimiento:</b> ADR, diagramas como código Mermaid, contratos en el registro de esquemas, hexagonal y procedimientos de operación.</p>
+        </div>
+      </Cols>
+    ),
+  },
+
+  /* ───────────────────────── 15. CIERRE ───────────────────────── */
+  {
+    sec: 15, title: 'Glosario esencial',
     body: (
       <div className="glossary">
         {[
@@ -1425,14 +1782,18 @@ export const SLIDES = [
           ['Comando', 'Mensaje que pide a un servicio ejecutar un paso de la Saga.'],
           ['DLQ', 'Cola de mensajes fallidos para no bloquear la partición.'],
           ['Lease', 'Reclamación temporal de una Saga por una instancia.'],
-          ['Offset', 'Posición de un consumidor en una partición de Kafka.'],
-          ['Canary', 'Despliegue que envía primero una fracción pequeña del tráfico.'],
-          ['HPA y KEDA', 'Escalado de pods por métricas y por eventos (retraso de Kafka).'],
+          ['Canary', 'Despliegue que envía primero una fracción pequeña del tráfico o de las particiones.'],
+          ['PSS', 'Sistema de servicio al pasajero (reservas, inventario, check-in), como Amadeus Altéa.'],
+          ['PNL y ADL', 'Mensajes IATA con la lista de pasajeros de un vuelo y sus cambios.'],
+          ['BSP', 'Sistema de IATA por el que las agencias liquidan las ventas hechas por GDS.'],
           ['EDIFACT / NDC', 'Mensajería de los GDS / estándar IATA de distribución moderna.'],
-          ['GDS', 'Sistema global de distribución, como Amadeus o Sabre.'],
           ['RPO / RTO', 'Máxima pérdida de datos aceptable / tiempo máximo de recuperación.'],
-          ['CDC', 'Captura de cambios de datos para sincronizar durante la migración.'],
-          ['SSIM', 'Formato IATA para intercambiar la programación de vuelos.'],
+          ['Pilot light', 'Datos y mensajería replicados en otra región; el cómputo se escala al declarar el desastre.'],
+          ['Presupuesto de errores', 'Indisponibilidad que admite la meta: 43,8 min al mes para el 99,9 %.'],
+          ['Modo solo consulta', 'La búsqueda sigue activa y las nuevas reservas se rechazan (venta_suspendida).'],
+          ['Borrado criptográfico', 'Suprimir un dato cifrado destruyendo su llave.'],
+          ['MTBF / MTTR', 'Tiempo medio entre fallas / tiempo medio de reparación.'],
+          ['Punto de variación', 'Lugar preparado para extender o reemplazar una parte sin reescribir el resto.'],
         ].map(([t, d]) => (
           <div key={t} className="gl"><b>{t}</b><span>{d}</span></div>
         ))}
@@ -1440,18 +1801,20 @@ export const SLIDES = [
     ),
   },
   {
-    sec: 14, layout: 'end', title: 'Gracias',
+    sec: 15, layout: 'end', title: 'Gracias',
     body: (
       <div className="end">
         <div className="mono dim">VUELO COMPLETADO · ATERRIZAJE EN HORARIO</div>
         <h2 className="end-t">¿Preguntas?</h2>
-        <p className="end-sub">Una arquitectura que vende cada asiento una sola vez, coordinada solo por Kafka y operada sobre servicios administrados de AWS.</p>
+        <p className="end-sub">El asiento 14C tiene un solo dueño, y ninguna falla vuelve a apagar toda la venta. El detalle completo queda en el anexo (tecla M).</p>
         <div className="refs">
           <b className="mono">REFERENCIAS PRINCIPALES</b>
           <span>Rozanski y Woods (2009). <i>Software Systems Architecture</i>. Addison-Wesley.</span>
           <span>The Open Group (2011). <i>TOGAF 9.1</i>. · IEEE Std 1471-2000.</span>
           <span>Hitpass (2014). <i>Business Process Management</i>. · Bijlsma et al. (2011). <i>Software Architecture</i>.</span>
-          <span>Avianca Group (2025), resultados 3T · Ley 1581 de 2012 · PCI-DSS v4.0.1 · Ley 962 de 2005.</span>
+          <span>Richardson (2018). <i>Microservices Patterns</i>. · Beyer et al. (2016). <i>Site Reliability Engineering</i>.</span>
+          <span>AWS (2021). <i>Disaster Recovery of Workloads on AWS</i>. · Fowler (2004). <i>StranglerFigApplication</i>.</span>
+          <span>Avianca Group (2025), resultados 3T · Amadeus (2021) · Ley 1581 de 2012 · Decreto 1377 de 2013 · PCI-DSS v4.0.1 · Ley 962 de 2005.</span>
         </div>
         <div className="mono dim">Carolina Cuero Guevara · Luis Alberto Girón · Nilson Aldair Molina Rengifo · 2026</div>
       </div>

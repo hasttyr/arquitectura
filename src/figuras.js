@@ -1,5 +1,5 @@
-// Catálogo de figuras del documento. `src` es relativo a /public.
-const f = (n, file, titulo, desc) => ({ n, src: `/figuras/${file}`, titulo, desc });
+// Catálogo de figuras del documento. `src` es relativo a la página (base './').
+const f = (n, file, titulo, desc) => ({ n, src: `figuras/${file}`, titulo, desc });
 
 export const FIGURAS = Object.fromEntries(
   [
@@ -18,7 +18,7 @@ export const FIGURAS = Object.fromEntries(
     f('6', 'figura-06-vista-de-capas-del-sistema.svg', 'Vista de capas del sistema',
       'Canales, entrada, servicios de negocio, mensajería y datos, con dependencias en un solo sentido.'),
     f('7', 'figura-07-diagrama-de-componentes.svg', 'Diagrama de componentes',
-      'Los nueve servicios, el API Gateway, el Bus de Eventos, el histórico y los externos. Flechas gruesas: Kafka; delgadas: HTTP de borde.'),
+      'Los nueve servicios, el API Gateway, el Bus de Eventos, el histórico y los externos. Flechas gruesas: comandos, respuestas y eventos por Kafka; delgadas: HTTP de borde o enlaces con externos.'),
     f('8', 'figura-08-capa-de-integracion.svg', 'Capa de Integración: adaptadores y modelo canónico',
       'Adaptadores EDIFACT, NDC y Star Alliance (previsto), el traductor canónico y las dos interfaces de borde.'),
     f('9', 'figura-09-secuencia-de-la-saga-de-reserva-coordinada-por-kafka.svg', 'Secuencia de la Saga de reserva coordinada por Kafka',
@@ -28,7 +28,7 @@ export const FIGURAS = Object.fromEntries(
     f('11', 'figura-11-secuencia-de-emision-notificacion-y-millas.svg', 'Secuencia de emisión, notificación y acumulación de millas',
       'Lo que ocurre después de ReservaConfirmada, incluida la rama de emisión fallida.'),
     f('12', 'figura-12-estados-de-la-saga-de-creacion-y-sus-compensaciones.svg', 'Estados de la Saga de creación y sus compensaciones',
-      'Cada paso como estado, la respuesta que lo avanza, el comando que publica y su compensación.'),
+      'Dentro de EN_CURSO, los pasos con la respuesta que los avanza y el comando que publican; fuera, cómo termina (COMPLETADA, COMPENSADA o REQUIERE_INTERVENCION) y qué lleva a compensar.'),
     f('13', 'figura-13-secuencia-de-conflicto-de-asiento-y-pago-tardio.svg', 'Secuencia de conflicto de asiento y pago tardío',
       'Conflicto con reserva PENDIENTE y pago tardío sobre una reserva EXPIRADA o FALLIDA.'),
     f('14', 'figura-14-secuencia-de-cancelacion-y-reembolso.svg', 'Secuencia de cancelación y reembolso confirmado',
@@ -46,9 +46,9 @@ export const FIGURAS = Object.fromEntries(
     f('18', 'figura-18-propiedad-de-los-datos-y-flujo-de-eventos.svg', 'Propiedad de los datos y flujo de eventos',
       'Fuentes de verdad frente a datos derivados o temporales, y el recorrido desde el Outbox.'),
     f('19', 'figura-19-topologia-de-topicos-de-kafka-comandos-respuestas-y-eventos.svg', 'Topología de tópicos de Kafka',
-      'Panel A: comandos y respuestas de la Saga. Panel B: eventos de dominio y sus consumidores.'),
+      'Panel A: tópicos de comandos, su consumidor y el tópico de respuestas. Panel B: eventos de dominio, su clave de partición cuando no es id_reserva y sus consumidores.'),
     f('20', 'figura-20-estados-de-la-reserva.svg', 'Estados de la reserva', 'De PENDIENTE a CONFIRMADA, FALLIDA, EXPIRADA o CANCELADA.'),
-    f('21', 'figura-21-estados-del-pago.svg', 'Estados del pago', 'Incluye EN_VERIFICACION, la anulación y el reembolso.'),
+    f('21', 'figura-21-estados-del-pago.svg', 'Estados del pago', 'Incluye EN_VERIFICACION cuando la pasarela no responde, la anulación de una autorización y el reembolso.'),
     f('22', 'figura-22-estados-del-reembolso.svg', 'Estados del reembolso', 'Solo se confirma cuando la pasarela lo confirma.'),
     f('23', 'figura-23-estados-del-asiento.svg', 'Estados del asiento', 'APARTADO solo existe en Valkey; DISPONIBLE y OCUPADO se persisten.'),
     f('24', 'figura-24-estados-del-tiquete.svg', 'Estados del tiquete', 'Desde la reserva confirmada hasta la emisión, la falla o la anulación.'),
@@ -67,11 +67,15 @@ export const FIGURAS = Object.fromEntries(
     f('31', 'figura-31-grupos-de-instalacion-dependencias-y-verificacion.svg', 'Grupos de instalación, dependencias y verificación',
       'Orden de instalación por dependencias técnicas y la verificación de cada grupo.'),
     f('32', 'figura-32-fases-del-modelo-de-migracion-y-criterios-para-avanzar.svg', 'Fases del modelo de migración y criterios para avanzar',
-      'Strangler fig por lotes de vuelos: sincronización y criterio de avance por fase.'),
+      'Seis fases (preparación, perfiles y millas, sombra, corte por lotes de vuelos, corte por canal y retiro del legado), su sincronización y su criterio para avanzar.'),
     f('33', 'figura-33-grupos-de-soporte-canales-de-atencion-y-escalamiento.svg', 'Grupos de soporte, canales de atención y escalamiento',
       'Quién recibe soporte, por qué canal llega cada incidente y cómo se escala N1 → N2 → N3.'),
     f('34', 'figura-34-presupuesto-de-latencia-de-la-reserva.svg', 'Presupuesto de latencia de la aceptación y del apartado (p95)',
-      'Descomposición del p95 de la respuesta 202 y del apartado confirmado.'),
+      'Percentil 95 de la aceptación (202) y del apartado visible para el cliente, desglosado por tramo.'),
+    f('35', 'figura-35-modos-de-operacion.svg', 'Modos de operación del sistema y condiciones de cambio',
+      'Completo, degradado, solo consulta y contingencia regional, con los eventos que llevan de uno a otro.'),
+    f('36', 'figura-36-recuperacion-ante-desastres-pilot-light.svg', 'Recuperación ante desastres con pilot light en us-west-2',
+      'Qué se mantiene replicado y en marcha en la región de contingencia y qué se escala solo al declarar el desastre.'),
     f('6T', 'tabla-06-dofa.png', 'Tabla 6. Análisis DOFA', 'Fortalezas, debilidades, oportunidades y amenazas de la arquitectura elegida.'),
   ].map((x) => [x.n, x]),
 );

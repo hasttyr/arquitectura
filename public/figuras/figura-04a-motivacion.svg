@@ -51,9 +51,10 @@
 <text x="379.5" y="96.0" text-anchor="middle">GDS</text>
 <path d="M445 30 H528 L537 39 V99 L528 108 H445 L436 99 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
 <circle cx="524" cy="42" r="6" fill="none" stroke="#333"/><circle cx="524" cy="42" r="1.6" fill="#333"/><line x1="515" y1="42" x2="533" y2="42" stroke="#333"/><line x1="517.636038969321" y1="35.63603896932107" x2="530.363961030679" y2="48.36396103067893" stroke="#333"/><line x1="524" y1="33" x2="524" y2="51" stroke="#333"/><line x1="530.363961030679" y1="35.63603896932107" x2="517.636038969321" y2="48.36396103067893" stroke="#333"/>
-<text x="486.5" y="65.3" text-anchor="middle">D5 Protección</text>
-<text x="486.5" y="80.7" text-anchor="middle">de datos y</text>
-<text x="486.5" y="96.0" text-anchor="middle">PCI-DSS</text>
+<text x="486.5" y="57.7" text-anchor="middle">D5 Datos,</text>
+<text x="486.5" y="73.0" text-anchor="middle">PCI-DSS y</text>
+<text x="486.5" y="88.3" text-anchor="middle">derechos del</text>
+<text x="486.5" y="103.7" text-anchor="middle">pasajero</text>
 <path d="M552 30 H635 L644 39 V99 L635 108 H552 L543 99 V39 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
 <circle cx="631" cy="42" r="6" fill="none" stroke="#333"/><circle cx="631" cy="42" r="1.6" fill="#333"/><line x1="622" y1="42" x2="640" y2="42" stroke="#333"/><line x1="624.636038969321" y1="35.63603896932107" x2="637.363961030679" y2="48.36396103067893" stroke="#333"/><line x1="631" y1="33" x2="631" y2="51" stroke="#333"/><line x1="637.363961030679" y1="35.63603896932107" x2="624.636038969321" y2="48.36396103067893" stroke="#333"/>
 <text x="593.5" y="57.7" text-anchor="middle">D6 16</text>
@@ -79,8 +80,9 @@
 <text x="379.5" y="222.0" text-anchor="middle">sector</text>
 <path d="M445 162 H528 L537 171 V219 L528 228 H445 L436 219 V171 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
 <circle cx="524" cy="174" r="7" fill="none" stroke="#333"/><circle cx="524" cy="174" r="4.2" fill="none" stroke="#333"/><circle cx="524" cy="174" r="1.5" fill="#333"/>
-<text x="486.5" y="199.0" text-anchor="middle">M5 Datos y</text>
-<text x="486.5" y="214.4" text-anchor="middle">pagos seguros</text>
+<text x="486.5" y="191.3" text-anchor="middle">M5 Pagos y</text>
+<text x="486.5" y="206.7" text-anchor="middle">datos</text>
+<text x="486.5" y="222.0" text-anchor="middle">confiables</text>
 <path d="M552 162 H635 L644 171 V219 L635 228 H552 L543 219 V171 Z" fill="rgb(204,204,255)" stroke="#5c5c5c"/>
 <circle cx="631" cy="174" r="7" fill="none" stroke="#333"/><circle cx="631" cy="174" r="4.2" fill="none" stroke="#333"/><circle cx="631" cy="174" r="1.5" fill="#333"/>
 <text x="593.5" y="199.0" text-anchor="middle">M6 Fidelizar</text>
