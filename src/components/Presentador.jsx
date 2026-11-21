@@ -70,7 +70,7 @@ export default function Presentador({ slides, secciones, canal }) {
         <section>
           <div className="mono dim">AHORA{s.min ? ` · ${fmt(s.min * 60)} previstos` : ''}</div>
           <h1>{s.title || 'Portada'}</h1>
-          <p className="pres-notas">{s.notas || 'Diapositiva de anexo: úsela solo para responder preguntas.'}</p>
+          <p className="pres-notas">{s.notas || 'Diapositiva del anexo de respaldo.'}</p>
         </section>
         <aside>
           <div className="pres-timer">

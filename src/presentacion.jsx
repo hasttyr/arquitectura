@@ -91,7 +91,7 @@ function MapaAD({ ir, slides }) {
 }
 
 const RUTA = [
-  { ...PORTADA, quien: 'Integrante 1', min: 0.3, notas: 'Saludo. Somos [nombres]. Presentamos la arquitectura del sistema de reservas de una aerolínea, con Avianca como caso real. Cinco actos; al final, preguntas.' },
+  { ...PORTADA, quien: 'Integrante 1', min: 0.3, notas: 'Saludo. Somos [nombres]. Presentamos la arquitectura del sistema de reservas de una aerolínea, con Avianca como caso real. Cinco actos.' },
   {
     sec: 0, title: 'La descripción arquitectónica completa', kicker: 'Mapa de la exposición', quien: 'Integrante 1', min: 0.6,
     notas: 'No leer el mapa: mostrarlo. Decir: el documento sigue IEEE 1471 / ISO 42010 con los seis puntos de vista y las cuatro perspectivas de Rozanski y Woods, y TOGAF para la arquitectura empresarial. Hoy mostramos lo marcado HOY; todo lo demás está a un clic en el anexo, para las preguntas.',
@@ -392,7 +392,7 @@ const RUTA = [
       </Cols>
     ),
   },
-  { ...GRACIAS, sec: 'a5', quien: 'Todos', min: 0.3, notas: 'Abrir preguntas. Para responder, usar el índice (M) → anexo: costo y beneficio, matriz, STRIDE, respaldo, etc.' },
+  { ...GRACIAS, sec: 'a5', quien: 'Todos', min: 0.3, notas: 'Agradecer y cerrar; no invitar a preguntas. Si el profesor pregunta algo, el índice (M) lleva al anexo: costo y beneficio, matriz, STRIDE, respaldo, etc.' },
 ];
 
 export const SECCIONES = [

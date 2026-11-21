@@ -97,7 +97,7 @@ export const ANEXO = [
     ),
   },
   {
-    sec: 0, title: 'Anexo: plan de vuelo completo', kicker: 'Anexo para preguntas',
+    sec: 0, title: 'Anexo: plan de vuelo completo', kicker: 'Anexo de respaldo',
     body: ({ ir, slides }) => (
       <div className="board board-2" role="table" aria-label="Anexo por sección">
         <div className="board-row board-headrow mono" role="row">
@@ -1805,8 +1805,8 @@ export const ANEXO = [
     body: (
       <div className="end">
         <div className="mono dim">VUELO COMPLETADO · ATERRIZAJE EN HORARIO</div>
-        <h2 className="end-t">¿Preguntas?</h2>
-        <p className="end-sub">El asiento 14C tiene un solo dueño, y ninguna falla vuelve a apagar toda la venta. El detalle completo queda en el anexo (tecla M).</p>
+        <h2 className="end-t">¡Gracias!</h2>
+        <p className="end-sub">El asiento 14C tiene un solo dueño, y ninguna falla vuelve a apagar toda la venta. Gracias por su atención.</p>
         <div className="refs">
           <b className="mono">REFERENCIAS PRINCIPALES</b>
           <span>Rozanski y Woods (2009). <i>Software Systems Architecture</i>. Addison-Wesley.</span>
