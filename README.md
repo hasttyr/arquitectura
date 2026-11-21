@@ -50,6 +50,6 @@ Para regenerar el PDF: abran la presentación con `?imprimir` (por ejemplo `http
 - El anexo está en `src/slides.jsx`.
 - Los componentes interactivos están en `src/components/interactivos.jsx` y la ventana del presentador en `src/components/Presentador.jsx`.
 
-## Desplegar en Vercel
+## Despliegue
 
-Vercel detecta Vite solo (build `npm run build`, salida `dist`). También se puede usar `npx vercel` dentro de esta carpeta.
+La presentación se publica sola en https://arquitectura-reservas.vercel.app cada vez que se hace push a `main` en GitHub (integración de Git del proyecto `arquitectura-reservas` en Vercel: build `npm run build`, salida `dist`). Las otras ramas generan una vista previa. No se despliega a mano con el CLI.
