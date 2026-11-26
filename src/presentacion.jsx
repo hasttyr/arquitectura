@@ -1,4 +1,4 @@
-// Arma la presentación: un recorrido principal de 15 minutos (parte 'ruta') y el anexo
+// Arma la presentación: un recorrido principal (parte 'ruta') y el anexo
 // con todo el detalle del documento (parte 'anexo'), que se abre desde el índice (M).
 import { ANEXO, SECCIONES as SECCIONES_ANEXO } from './slides.jsx';
 import { Asiento14C, Interruptores, MatrizInteractiva, Puerta, SagaAnimada, Src } from './components/interactivos.jsx';
@@ -22,17 +22,15 @@ const ACTOS = [
 ];
 
 const puerta = (a, destino, pregunta, notas) => ({
-  sec: a.n, layout: 'divisoria', title: destino, quien: a.quien, min: 0.15, notas,
-  // Se calcula al mostrarla, cuando el recorrido ya existe.
-  body: () => <Puerta code={a.code} destino={destino} pregunta={pregunta} quien={`${a.quienes || a.quien} · ${Math.round(minutosActo(a.n))} min`} />,
+  sec: a.n, layout: 'divisoria', title: destino, quien: a.quien, notas,
+  body: () => <Puerta code={a.code} destino={destino} pregunta={pregunta} quien={a.quienes || a.quien} />,
 });
 const [A1, A2, A3, A4, A5] = ACTOS;
 // El acto 4 lo comparten: Carolina hasta "Degradar antes que caer" y Luis desde el modelo de disponibilidad.
 const A4L = { ...A4, quien: 'Luis' };
 
 /** Diapositiva del anexo que también se expone: conserva su contenido y cambia acto, kicker, expositor y notas. */
-const ver = (titulo, a, kicker, min, notas) => ({ ...buscar(titulo), sec: a.n, kicker, quien: a.quien, min, notas });
-const minutosActo = (n) => RUTA.filter((z) => z.sec === n).reduce((t, z) => t + (z.min || 0), 0);
+const ver = (titulo, a, kicker, notas) => ({ ...buscar(titulo), sec: a.n, kicker, quien: a.quien, notas });
 
 // [tema, modelos que produjimos, diapositiva del anexo que lo detalla, ¿se expone hoy?]
 const MAPA = [
@@ -93,9 +91,9 @@ function MapaAD({ ir, slides }) {
 }
 
 const RUTA = [
-  { ...PORTADA, quien: 'Luis', min: 0.3, notas: 'Saludo. Somos Luis Alberto Girón, Nilson Aldair Molina Rengifo y Carolina Cuero Guevara. Presentamos la arquitectura del sistema de reservas de una aerolínea, con Avianca como caso real. Cinco actos.' },
+  { ...PORTADA, quien: 'Luis', notas: 'Saludo. Somos Luis Alberto Girón, Nilson Aldair Molina Rengifo y Carolina Cuero Guevara. Presentamos la arquitectura del sistema de reservas de una aerolínea, con Avianca como caso real. Cinco actos.' },
   {
-    sec: 0, title: 'La descripción arquitectónica completa', kicker: 'Mapa de la exposición', quien: 'Luis', min: 0.6,
+    sec: 0, title: 'La descripción arquitectónica completa', kicker: 'Mapa de la exposición', quien: 'Luis',
     notas: 'No leer el mapa: mostrarlo. Decir: el documento sigue IEEE 1471 / ISO 42010 con los seis puntos de vista y las cuatro perspectivas de Rozanski y Woods, y TOGAF para la arquitectura empresarial. Hoy mostramos lo marcado HOY; todo lo demás está a un clic en el anexo, para las preguntas.',
     body: (props) => <MapaAD {...props} />,
   },
@@ -103,7 +101,7 @@ const RUTA = [
   /* ── Acto 1: el problema y el negocio ── */
   puerta(A1, 'El problema y el negocio', '¿Por qué una aerolínea necesita otra arquitectura para vender tiquetes?', 'Es la pregunta que guía el acto.'),
   {
-    sec: 'a1', title: 'Una aerolínea con un solo interruptor de venta', quien: 'Luis', min: 1.2,
+    sec: 'a1', title: 'Una aerolínea con un solo interruptor de venta', quien: 'Luis',
     notas: 'Contar dos o tres filas, no las cinco. Idea: en todas, una falla en una parte apagó toda la venta o dejó al cliente sin canal. Cerrar con el costo: 0,7 M USD de ingresos en riesgo por hora; es aproximado porque no todo se pierde.',
     body: (
       <Cols r="1.35fr 0.9fr">
@@ -135,15 +133,15 @@ const RUTA = [
     ),
   },
   {
-    sec: 'a1', title: 'Hot Sale, 8:00 p. m. · asiento 14C', quien: 'Luis', min: 1.5,
+    sec: 'a1', title: 'Hot Sale, 8:00 p. m. · asiento 14C', quien: 'Luis',
     notas: 'Pedir que voten antes de lanzar. Después: uno solo confirma. A los otros 99 no se les cobra: Valkey rechaza su apartado antes de iniciar el pago, y si alguno alcanzó a tener una autorización (por ejemplo, porque su apartado venció), se anula. Este asiento 14C es el hilo de toda la presentación: volvemos a él en el acto 2.',
     body: <Asiento14C />,
   },
-  ver('Interesados: preocupación, poder e interés', A1, 'Proceso de definición · interesados', 0.8, 'Captura de necesidades: ocho interesados, cada uno con su preocupación y la sección que la atiende. Los de poder alto son gerencia comercial, socios GDS y cumplimiento; por eso el diseño prioriza trazabilidad y estándares del sector.'),
-  ver('Requisitos de calidad medibles', A1, 'Proceso de definición · requisitos', 1, 'Cada requisito con un objetivo medible: es el criterio de aceptación de las pruebas y del SLA. Destacar integridad (exactamente 1 confirmación) y disponibilidad (99,9 % sin exclusiones por mantenimiento).'),
-  ver('Escenarios de calidad', A1, 'Proceso de definición · escenarios', 1, 'Estructura del curso: nombre, entorno, estímulo, respuesta y medida. EC2 es el asiento 14C que acabamos de ver; EC3, EC4 y EC6 vuelven en el acto 4.'),
+  ver('Interesados: preocupación, poder e interés', A1, 'Proceso de definición · interesados', 'Captura de necesidades: ocho interesados, cada uno con su preocupación y la sección que la atiende. Los de poder alto son gerencia comercial, socios GDS y cumplimiento; por eso el diseño prioriza trazabilidad y estándares del sector.'),
+  ver('Requisitos de calidad medibles', A1, 'Proceso de definición · requisitos', 'Cada requisito con un objetivo medible: es el criterio de aceptación de las pruebas y del SLA. Destacar integridad (exactamente 1 confirmación) y disponibilidad (99,9 % sin exclusiones por mantenimiento).'),
+  ver('Escenarios de calidad', A1, 'Proceso de definición · escenarios', 'Estructura del curso: nombre, entorno, estímulo, respuesta y medida. EC2 es el asiento 14C que acabamos de ver; EC3, EC4 y EC6 vuelven en el acto 4.'),
   {
-    sec: 'a1', title: 'Lo que el negocio le exige al sistema', quien: 'Luis', min: 1,
+    sec: 'a1', title: 'Lo que el negocio le exige al sistema', quien: 'Luis',
     notas: 'Una frase por cifra. De los 8 interesados y 6 controladores salen 6 metas medibles (M1–M6), y de cada meta un requisito. El proceso BPMN fija el orden: primero lo que no tiene efectos.',
     body: (
       <>
@@ -167,12 +165,12 @@ const RUTA = [
       </>
     ),
   },
-  ver('Mapa de capacidades de negocio', A1, 'Arquitectura de negocio · capacidades', 0.7, 'Las capacidades dicen qué hace la aerolínea, no cómo; cada capacidad de venta se asigna a un componente, y eso da la frontera de cada microservicio.'),
-  ver('Vista de arquitectura de negocio (ArchiMate)', A1, 'Arquitectura de negocio · ArchiMate', 0.8, 'De arriba abajo: controladores y metas, procesos dentro y fuera del alcance, los dos servicios de negocio y los ocho roles. Modelo hecho en Archi.'),
-  ver('Contexto actual (AS-IS) y brechas', A1, 'Selección de estilos · contexto actual', 0.8, 'Paso 3 de la selección de estilos: hoy todo corre en Amadeus Altéa. Las brechas, por dominio de arquitectura empresarial, explican qué cambia.'),
-  ver('Alternativa 0 frente al PSS y hoja de ruta por etapas', A1, 'Selección de estilos · comprar o construir', 0.8, 'Antes del estilo se decide qué construir: la alternativa 0 se descarta; la etapa 1 construye alrededor de Altéa y la etapa 2, condicionada, migra el inventario.'),
+  ver('Mapa de capacidades de negocio', A1, 'Arquitectura de negocio · capacidades', 'Las capacidades dicen qué hace la aerolínea, no cómo; cada capacidad de venta se asigna a un componente, y eso da la frontera de cada microservicio.'),
+  ver('Vista de arquitectura de negocio (ArchiMate)', A1, 'Arquitectura de negocio · ArchiMate', 'De arriba abajo: controladores y metas, procesos dentro y fuera del alcance, los dos servicios de negocio y los ocho roles. Modelo hecho en Archi.'),
+  ver('Contexto actual (AS-IS) y brechas', A1, 'Selección de estilos · contexto actual', 'Paso 3 de la selección de estilos: hoy todo corre en Amadeus Altéa. Las brechas, por dominio de arquitectura empresarial, explican qué cambia.'),
+  ver('Alternativa 0 frente al PSS y hoja de ruta por etapas', A1, 'Selección de estilos · comprar o construir', 'Antes del estilo se decide qué construir: la alternativa 0 se descarta; la etapa 1 construye alrededor de Altéa y la etapa 2, condicionada, migra el inventario.'),
   {
-    sec: 'a1', title: 'La decisión: ¿monolito, microservicios o serverless?', quien: 'Luis', min: 1.5,
+    sec: 'a1', title: 'La decisión: ¿monolito, microservicios o serverless?', quien: 'Luis',
     notas: 'Primero aclarar: no compramos otro PSS (alternativa 0) porque las fallas están en la postventa y los canales; la etapa 1 construye alrededor de Altéa. Pedir voto, revelar, y mover "La operación pesa más": B empata con C. Esa es nuestra autocrítica: la complejidad operativa es el riesgo aceptado.',
     body: (
       <>
@@ -181,13 +179,13 @@ const RUTA = [
       </>
     ),
   },
-  ver('Autocrítica y mitigaciones', A1, 'Selección de estilos · riesgos', 0.8, 'Lo que puede salir mal con B y cómo se mitiga. Decirlo con honestidad: para un equipo pequeño, el monolito sería una alternativa legítima.'),
-  ver('Costo y beneficio', A1, 'Selección de estilos · costo total', 0.9, 'B cuesta unos 112.000 USD al mes con el equipo, 44.000 más que A. Se paga si evita unas 8 horas de caída total al año. Los costos del equipo y el 10 % de pérdida son supuestos, a validar con la aerolínea.'),
+  ver('Autocrítica y mitigaciones', A1, 'Selección de estilos · riesgos', 'Lo que puede salir mal con B y cómo se mitiga. Decirlo con honestidad: para un equipo pequeño, el monolito sería una alternativa legítima.'),
+  ver('Costo y beneficio', A1, 'Selección de estilos · costo total', 'B cuesta unos 112.000 USD al mes con el equipo, 44.000 más que A. Se paga si evita unas 8 horas de caída total al año. Los costos del equipo y el 10 % de pérdida son supuestos, a validar con la aerolínea.'),
 
   /* ── Acto 2: la arquitectura ── */
   puerta(A2, 'La arquitectura', '¿Cómo se vende el 14C una sola vez sin detener todo lo demás?', 'Cambio de expositor: Nilson.'),
   {
-    sec: 'a2', title: 'Componentes y estilos: los servicios nunca se llaman entre sí', kicker: 'Punto de vista funcional · estilos', quien: 'Nilson', min: 1,
+    sec: 'a2', title: 'Componentes y estilos: los servicios nunca se llaman entre sí', kicker: 'Punto de vista funcional · estilos', quien: 'Nilson',
     notas: 'Nueve servicios, uno por capacidad de negocio. Estilo principal: microservicios con publicación/suscripción sobre Kafka. Subsidiarios: hub de integración (GDS, NDC, Altéa), multicapa, cliente-servidor con el API Gateway y hexagonal dentro de cada servicio. Regla P9: entre servicios solo Kafka; HTTP queda en el borde.',
     body: (
       <Cols r="1.3fr 1fr">
@@ -209,15 +207,15 @@ const RUTA = [
       </Cols>
     ),
   },
-  ver('Componentes, responsabilidades y contratos', A2, 'Punto de vista funcional · contratos', 0.8, 'No leer la tabla: señalar que cada servicio declara qué comandos consume y qué eventos publica. Es el contrato que permite que no se llamen entre sí.'),
+  ver('Componentes, responsabilidades y contratos', A2, 'Punto de vista funcional · contratos', 'No leer la tabla: señalar que cada servicio declara qué comandos consume y qué eventos publica. Es el contrato que permite que no se llamen entre sí.'),
   {
-    sec: 'a2', title: 'La Saga de una reserva, paso a paso', kicker: 'Funcional · comportamiento', quien: 'Nilson', min: 1.8,
+    sec: 'a2', title: 'La Saga de una reserva, paso a paso', kicker: 'Funcional · comportamiento', quien: 'Nilson',
     notas: 'Es el comportamiento del punto de vista funcional (las secuencias UML están en el anexo). Recorrer "Todo sale bien" rápido (5-6 clics). Luego "Asiento perdido": el pago llega tarde, Inventario responde ConflictoAsientos y se anula la autorización sin cobrar. Mencionar: Outbox (estado y mensaje en la misma transacción) e idempotencia (un mensaje repetido no repite el efecto).',
     body: <SagaAnimada />,
   },
-  ver('Comunicación del flujo y emisión posterior', A2, 'Punto de vista funcional · UML de comportamiento', 0.7, 'Los mismos mensajes de la Saga como diagrama de comunicación UML, y lo que pasa después de confirmar: emisión, notificación y acumulación de millas.'),
+  ver('Comunicación del flujo y emisión posterior', A2, 'Punto de vista funcional · UML de comportamiento', 'Los mismos mensajes de la Saga como diagrama de comunicación UML, y lo que pasa después de confirmar: emisión, notificación y acumulación de millas.'),
   {
-    sec: 'a2', title: 'Cada dato tiene un solo dueño', kicker: 'Punto de vista de información', quien: 'Nilson', min: 1,
+    sec: 'a2', title: 'Cada dato tiene un solo dueño', kicker: 'Punto de vista de información', quien: 'Nilson',
     notas: 'Tres modelos del punto de vista: estructura (clases y entidad-relación en el anexo), flujo (este diagrama: cada servicio escribe en su base y publica desde el Outbox) y ciclo de vida (las máquinas de estado). Lo derivado, como Valkey o el modelo de lectura, nunca es autoridad. Cerrar con retención: 10 años para lo financiero y borrado criptográfico para los datos personales.',
     body: (
       <Cols r="1.1fr 1fr">
@@ -239,10 +237,10 @@ const RUTA = [
       </Cols>
     ),
   },
-  ver('Modelo de datos e invariantes', A2, 'Punto de vista de información · estructura', 0.9, 'Modelo entidad-relación por servicio: las líneas punteadas son referencias lógicas entre servicios, nunca claves foráneas. Las invariantes se garantizan en la base, no en el código.'),
-  ver('Ciclos de vida: cinco máquinas de estado', A2, 'Punto de vista de información · ciclo de vida', 0.8, 'Cada estado lo cambia solo su servicio dueño. CONFIRMADA significa asientos ocupados y pago capturado, no tiquete emitido: eso lo dice el estado del tiquete.'),
+  ver('Modelo de datos e invariantes', A2, 'Punto de vista de información · estructura', 'Modelo entidad-relación por servicio: las líneas punteadas son referencias lógicas entre servicios, nunca claves foráneas. Las invariantes se garantizan en la base, no en el código.'),
+  ver('Ciclos de vida: cinco máquinas de estado', A2, 'Punto de vista de información · ciclo de vida', 'Cada estado lo cambia solo su servicio dueño. CONFIRMADA significa asientos ocupados y pago capturado, no tiquete emitido: eso lo dice el estado del tiquete.'),
   {
-    sec: 'a2', title: 'Por qué el 14C tiene un solo dueño', kicker: 'Punto de vista de concurrencia', quien: 'Nilson', min: 1.2,
+    sec: 'a2', title: 'Por qué el 14C tiene un solo dueño', kicker: 'Punto de vista de concurrencia', quien: 'Nilson',
     notas: 'Este es el momento de decir la frase una sola vez: Valkey coordina, PostgreSQL decide. Aunque Valkey pierda el apartado, el UPDATE condicional por versión impide la doble asignación. Es la respuesta al acto 1.',
     body: (
       <>
@@ -272,10 +270,10 @@ const RUTA = [
       </>
     ),
   },
-  ver('Diagrama de concurrencia', A2, 'Punto de vista de concurrencia · procesos e hilos', 0.8, 'Cada servicio es un proceso con sus hilos: consumidores de Kafka, relay del Outbox y un pool HTTP separado. Entre procesos, solo Kafka; Valkey es un proceso propio porque Inventario tiene varias réplicas.'),
-  ver('Catorce escenarios de concurrencia y falla', A2, 'Punto de vista de concurrencia · fallas', 0.9, 'Elegir tres: pago tardío (5), se cae una instancia de Reservas (7) y se pierden apartados en Valkey (9). Los 14 se prueban en staging.'),
+  ver('Diagrama de concurrencia', A2, 'Punto de vista de concurrencia · procesos e hilos', 'Cada servicio es un proceso con sus hilos: consumidores de Kafka, relay del Outbox y un pool HTTP separado. Entre procesos, solo Kafka; Valkey es un proceso propio porque Inventario tiene varias réplicas.'),
+  ver('Catorce escenarios de concurrencia y falla', A2, 'Punto de vista de concurrencia · fallas', 'Elegir tres: pago tardío (5), se cae una instancia de Reservas (7) y se pierden apartados en Valkey (9). Los 14 se prueban en staging.'),
   {
-    sec: 'a2', title: 'Dónde corre: solo servicios administrados de AWS', kicker: 'Punto de vista de despliegue', quien: 'Nilson', min: 0.8,
+    sec: 'a2', title: 'Dónde corre: solo servicios administrados de AWS', kicker: 'Punto de vista de despliegue', quien: 'Nilson',
     notas: 'Nada on-premise. Tres zonas de disponibilidad en us-east-1: si cae una, las otras atienden en 2 minutos o menos. Por qué us-east-1: AWS no tiene región en Colombia y es la de catálogo completo; la latencia desde Bogotá cabe en el presupuesto. Contingencia en us-west-2, que vemos en el acto 3.',
     body: (
       <Cols r="1.25fr 1fr">
@@ -290,13 +288,13 @@ const RUTA = [
       </Cols>
     ),
   },
-  ver('Modelo de red', A2, 'Punto de vista de despliegue · red', 0.7, 'Una VPC con subredes privadas por zona; cada base solo acepta a su servicio. Latencias esperadas por enlace y ancho de banda en el pico: unos 480 Mbps en el borde.'),
-  ver('Dependencias tecnológicas', A2, 'Punto de vista de despliegue · dependencias', 0.7, 'Modelo de dependencias: cada tecnología con su nodo y su versión exacta, para poder recrear el ambiente.'),
+  ver('Modelo de red', A2, 'Punto de vista de despliegue · red', 'Una VPC con subredes privadas por zona; cada base solo acepta a su servicio. Latencias esperadas por enlace y ancho de banda en el pico: unos 480 Mbps en el borde.'),
+  ver('Dependencias tecnológicas', A2, 'Punto de vista de despliegue · dependencias', 'Modelo de dependencias: cada tecnología con su nodo y su versión exacta, para poder recrear el ambiente.'),
 
   /* ── Acto 3: construir y operar ── */
   puerta(A3, 'Construir y operar', '¿Cómo se construye, se libera y se opera sin apagar la venta?', 'Cambio de expositor: Carolina.'),
   {
-    sec: 'a3', title: 'Cómo se construye y cómo se opera', kicker: 'Puntos de vista de desarrollo y operacional', quien: 'Carolina', min: 1,
+    sec: 'a3', title: 'Cómo se construye y cómo se opera', kicker: 'Puntos de vista de desarrollo y operacional', quien: 'Carolina',
     notas: 'Una frase por modelo, sin leer la tabla. Desarrollo: los módulos y sus reglas los verifica el pipeline; los patrones son obligatorios; el canary revierte solo. Operacional: la migración por etapas frente a Altéa y el respaldo con RPO y RTO por tipo de dato.',
     body: (
       <Cols r="1fr 1.1fr">
@@ -321,16 +319,16 @@ const RUTA = [
       </Cols>
     ),
   },
-  ver('Arquitectura hexagonal en cada servicio', A3, 'Punto de vista de desarrollo · módulos', 0.8, 'Estructura de módulos dentro de un servicio: el dominio en el centro, puertos y adaptadores alrededor. La plantilla de repositorio es igual para todos.'),
-  ver('Línea de código: ramas, versiones y pipeline', A3, 'Punto de vista de desarrollo · línea de código', 0.9, 'Trunk-based, SemVer, contratos FULL_ALL. El pipeline compila, prueba, despliega en staging, prueba carga y libera con canary que se revierte solo.'),
-  ver('Migración por etapas frente a Altéa', A3, 'Punto de vista operacional · migración', 1, 'Etapa 1: todo menos el inventario. Etapa 2: strangler fig por lotes de vuelos, un único sistema autoritativo por vuelo y reversión mientras Altéa conserve la venta.'),
-  ver('Modelo de soporte y acuerdos de nivel de servicio', A3, 'Punto de vista operacional · soporte', 0.8, 'Grupos N1 a N3, clases P1 a P4 y el SLA. El indicador nuevo: la venta se restaura en 30 minutos o menos tras un P1.'),
-  ver('Configuración, respaldo y restauración', A3, 'Punto de vista operacional · respaldo', 0.8, 'Nada se cambia a mano. RPO y RTO por tipo de dato; la última fila es la pérdida de la región, que cubre el pilot light del acto 4.'),
+  ver('Arquitectura hexagonal en cada servicio', A3, 'Punto de vista de desarrollo · módulos', 'Estructura de módulos dentro de un servicio: el dominio en el centro, puertos y adaptadores alrededor. La plantilla de repositorio es igual para todos.'),
+  ver('Línea de código: ramas, versiones y pipeline', A3, 'Punto de vista de desarrollo · línea de código', 'Trunk-based, SemVer, contratos FULL_ALL. El pipeline compila, prueba, despliega en staging, prueba carga y libera con canary que se revierte solo.'),
+  ver('Migración por etapas frente a Altéa', A3, 'Punto de vista operacional · migración', 'Etapa 1: todo menos el inventario. Etapa 2: strangler fig por lotes de vuelos, un único sistema autoritativo por vuelo y reversión mientras Altéa conserve la venta.'),
+  ver('Modelo de soporte y acuerdos de nivel de servicio', A3, 'Punto de vista operacional · soporte', 'Grupos N1 a N3, clases P1 a P4 y el SLA. El indicador nuevo: la venta se restaura en 30 minutos o menos tras un P1.'),
+  ver('Configuración, respaldo y restauración', A3, 'Punto de vista operacional · respaldo', 'Nada se cambia a mano. RPO y RTO por tipo de dato; la última fila es la pérdida de la región, que cubre el pilot light del acto 4.'),
 
   /* ── Acto 4: cuando algo falla ── */
   puerta(A4, 'Cuando algo falla', '¿Qué sigue funcionando si cae una parte, o toda la región?', 'Sigue Carolina con seguridad, desempeño y la degradación; desde el modelo de disponibilidad habla Luis.'),
   {
-    sec: 'a4', title: 'Seguridad, desempeño y evolución', kicker: 'Perspectivas: preocupación → táctica → hallazgo', quien: 'Carolina', min: 1,
+    sec: 'a4', title: 'Seguridad, desempeño y evolución', kicker: 'Perspectivas: preocupación → táctica → hallazgo', quien: 'Carolina',
     notas: 'Explicar el método una vez: cada perspectiva revisa todos los puntos de vista, aplica tácticas y deja hallazgos que cambiaron el diseño. Dar un hallazgo por perspectiva: los webhooks falsificables (HMAC), las conexiones agotadas (RDS Proxy) y los contratos sin modo de compatibilidad (FULL_ALL).',
     body: (
       <>
@@ -343,23 +341,23 @@ const RUTA = [
       </>
     ),
   },
-  ver('Perspectiva de seguridad: amenazas STRIDE', A4, 'Perspectiva de seguridad', 0.9, 'Doce amenazas con su contramedida. Destacar dos que son de aerolínea: bots que apartan asientos sin pagar (seat spinning) y pruebas masivas de tarjetas robadas.'),
-  ver('Perspectiva de desempeño: metas y modelo', A4, 'Perspectiva de desempeño', 0.9, 'Del volumen anual a la carga por segundo: nominal 1.850 búsquedas y 6 reservas; diseño para 3.000 y 30. El presupuesto de latencia muestra por qué la aceptación cabe en 1 segundo.'),
+  ver('Perspectiva de seguridad: amenazas STRIDE', A4, 'Perspectiva de seguridad', 'Doce amenazas con su contramedida. Destacar dos que son de aerolínea: bots que apartan asientos sin pagar (seat spinning) y pruebas masivas de tarjetas robadas.'),
+  ver('Perspectiva de desempeño: metas y modelo', A4, 'Perspectiva de desempeño', 'Del volumen anual a la carga por segundo: nominal 1.850 búsquedas y 6 reservas; diseño para 3.000 y 30. El presupuesto de latencia muestra por qué la aceptación cabe en 1 segundo.'),
   {
-    sec: 'a4', title: 'Degradar antes que caer', kicker: 'Perspectiva de disponibilidad', quien: 'Carolina', min: 1.5,
+    sec: 'a4', title: 'Degradar antes que caer', kicker: 'Perspectiva de disponibilidad', quien: 'Carolina',
     notas: 'Activar "Cae LifeMiles": se sigue vendiendo con dinero (fue la falla de 2019). Activar "Kafka o Inventario caídos": modo solo consulta, la búsqueda sigue. Recordar el acto 1: antes había un solo interruptor; ahora se apaga por partes.',
     body: <Interruptores />,
   },
-  ver('Modelo de disponibilidad y presupuesto de indisponibilidad', A4L, 'Perspectiva de disponibilidad · modelo', 1, 'Toma la palabra Luis. Los SLA de AWS en serie dan 99,68 %: el 99,9 % no se respalda con contratos, se mide. La disponibilidad se gana reduciendo el tiempo de reparación; dos incidentes P1 en un mes rompen el SLA.'),
-  { ...buscar('Procedimiento de conmutación regional y tiempos'), sec: 'a4', kicker: 'Recuperación ante desastres · pilot light', quien: 'Luis', min: 1.2, notas: 'Datos y mensajería ya están replicados en us-west-2; solo se escala el cómputo. Unos 90 minutos en total: la venta vuelve en 2 horas o menos y se pierde como máximo 1 minuto de datos. Paso clave: reconciliar el inventario antes de abrir, para no vender dos veces el 14C.' },
-  ver('Perspectiva de evolución: cambios previstos', A4L, 'Perspectiva de evolución', 0.9, 'Cada cambio por magnitud, probabilidad y plazo. La regla: pagar la flexibilidad desde el inicio solo cuando el cambio es probable y adaptarlo después sería caro.'),
+  ver('Modelo de disponibilidad y presupuesto de indisponibilidad', A4L, 'Perspectiva de disponibilidad · modelo', 'Toma la palabra Luis. Los SLA de AWS en serie dan 99,68 %: el 99,9 % no se respalda con contratos, se mide. La disponibilidad se gana reduciendo el tiempo de reparación; dos incidentes P1 en un mes rompen el SLA.'),
+  { ...buscar('Procedimiento de conmutación regional y tiempos'), sec: 'a4', kicker: 'Recuperación ante desastres · pilot light', quien: 'Luis', notas: 'Datos y mensajería ya están replicados en us-west-2; solo se escala el cómputo. Unos 90 minutos en total: la venta vuelve en 2 horas o menos y se pierde como máximo 1 minuto de datos. Paso clave: reconciliar el inventario antes de abrir, para no vender dos veces el 14C.' },
+  ver('Perspectiva de evolución: cambios previstos', A4L, 'Perspectiva de evolución', 'Cada cambio por magnitud, probabilidad y plazo. La regla: pagar la flexibilidad desde el inicio solo cuando el cambio es probable y adaptarlo después sería caro.'),
 
   /* ── Acto 5: aterrizaje ── */
   puerta(A5, 'Aterrizaje', '¿Cómo sabemos que el diseño responde a lo que pidió el negocio?', 'Cambio de expositor: Nilson cierra.'),
-  ver('Trazabilidad entre requisitos y diseño', A5, 'Trazabilidad', 0.9, 'Cada requisito o meta, con la decisión que lo sostiene en cada punto de vista y perspectiva. Es la prueba del principio P8: ninguna decisión sin propósito.'),
-  ver('Gobernanza de la arquitectura', A5, 'Gobernanza · TOGAF y COBIT', 0.8, 'ADR para cada decisión, comité técnico cada dos semanas y comité de dirección cada trimestre, que decide el paso a la etapa 2 y revisa las metas M1 a M6.'),
+  ver('Trazabilidad entre requisitos y diseño', A5, 'Trazabilidad', 'Cada requisito o meta, con la decisión que lo sostiene en cada punto de vista y perspectiva. Es la prueba del principio P8: ninguna decisión sin propósito.'),
+  ver('Gobernanza de la arquitectura', A5, 'Gobernanza · TOGAF y COBIT', 'ADR para cada decisión, comité técnico cada dos semanas y comité de dirección cada trimestre, que decide el paso a la etapa 2 y revisa las metas M1 a M6.'),
   {
-    sec: 'a5', title: 'Aterrizaje: cada falla, su respuesta', quien: 'Nilson', min: 0.8,
+    sec: 'a5', title: 'Aterrizaje: cada falla, su respuesta', quien: 'Nilson',
     notas: 'Cerrar el círculo con el acto 1. Decir con honestidad: las cifras de costo y carga son supuestos del equipo; las pruebas de concepto (PoC) son el siguiente paso. Es un diseño validable, no validado.',
     body: (
       <Cols r="1.1fr 1fr">
@@ -394,7 +392,7 @@ const RUTA = [
       </Cols>
     ),
   },
-  { ...GRACIAS, sec: 'a5', quien: 'Todos', min: 0.3, notas: 'Agradecer y cerrar; no invitar a preguntas. Si el profesor pregunta algo, el índice (M) lleva al anexo: costo y beneficio, matriz, STRIDE, respaldo, etc.' },
+  { ...GRACIAS, sec: 'a5', quien: 'Todos', notas: 'Agradecer y cerrar; no invitar a preguntas. Si el profesor pregunta algo, el índice (M) lleva al anexo: costo y beneficio, matriz, STRIDE, respaldo, etc.' },
 ];
 
 export const SECCIONES = [

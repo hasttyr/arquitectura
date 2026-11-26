@@ -178,12 +178,7 @@
 .pres-main h1 { font-family: var(--display); font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.1; margin: 6px 0 16px; }
 .pres-notas { font-size: clamp(1.25rem, 2vw, 1.6rem); line-height: 1.5; color: var(--ink); }
 .pres aside { display: flex; flex-direction: column; gap: 18px; }
-.pres-timer, .pres-sig { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 6px; }
-.pres-timer b { font-family: var(--mono); font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1; }
-.pres-desvio { font-size: 0.9375rem; letter-spacing: .1em; color: var(--teal); }
-.pres-desvio.tarde { color: var(--red); }
-.pres-desvio.pronto { color: var(--violet); }
-.pres-btns { margin-top: 8px; }
+.pres-sig { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 6px; }
 .pres-sig b { font-family: var(--display); font-size: 1.25rem; }
 .pres-cambio { color: var(--red); font-size: 0.8125rem; }
 .pres-keys { font-size: 0.75rem; }

@@ -1,6 +1,6 @@
 # Presentación · Sistema de Reservas de una Aerolínea
 
-Presentación web (Vite + React) del documento de arquitectura, preparada para la exposición final. Prioriza la cobertura completa sobre la duración: unos 40 minutos, repartidos entre los tres integrantes.
+Presentación web (Vite + React) del documento de arquitectura, preparada para la exposición final. Prioriza la cobertura completa sobre la duración. La exponen Luis (portada, A1 y el final del A4), Nilson (A2 y A5) y Carolina (A3 y el comienzo del A4).
 
 Tiene dos partes:
 
@@ -16,11 +16,12 @@ Las flechas recorren solo la parte en la que uno está, así que no se puede sal
 | ← → (o espacio, PageUp/PageDown del control) | Avanzar o retroceder |
 | `M` | Índice (exposición y anexo) |
 | `R` | Volver a la exposición desde el anexo |
-| `P` | Abrir la ventana del presentador (notas, quién habla, cronómetro y siguiente diapositiva) |
+| `P` | Abrir la ventana del presentador (notas, quién habla y siguiente diapositiva) |
+| `T` | Tema claro u oscuro (se recuerda) |
 | `B` | Pantalla negra |
 | `F` | Pantalla completa |
 
-En la ventana del presentador las flechas también controlan la presentación. El cronómetro arranca con la primera flecha y avisa si van demorados o adelantados frente al tiempo planeado de cada diapositiva.
+En la ventana del presentador las flechas también controlan la presentación, y avisa cuando la siguiente diapositiva la expone otra persona.
 
 Figuras: clic para ampliar · rueda o pellizco para zoom · arrastrar para mover · `0` para ajustar · `Esc` para cerrar.
 
@@ -46,7 +47,7 @@ npm run figuras    # vuelve a copiar las figuras desde ../diagramas-mermaid
 
 Para regenerar el PDF: abran la presentación con `?imprimir` (por ejemplo `http://localhost:4173/?imprimir`) e impriman a PDF desde Chrome con márgenes en «Ninguno» y «Gráficos de fondo» activado.
 
-- La exposición (actos, mapa, notas del presentador y tiempos) está en `src/presentacion.jsx`.
+- La exposición (actos, mapa, expositores y notas del presentador) está en `src/presentacion.jsx`.
 - El anexo está en `src/slides.jsx`.
 - Los componentes interactivos están en `src/components/interactivos.jsx` y la ventana del presentador en `src/components/Presentador.jsx`.
 

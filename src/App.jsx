@@ -281,7 +281,7 @@ function Presentacion() {
                 <button className="icon-btn" onClick={() => setMenu(false)} aria-label="Cerrar índice">✕</button>
               </div>
               <div className="drawer-list">
-                {[['EXPOSICIÓN · 15 MIN', RUTA], ['ANEXO DE RESPALDO', ANEXO]].map(([t, lista]) => (
+                {[['EXPOSICIÓN', RUTA], ['ANEXO DE RESPALDO', ANEXO]].map(([t, lista]) => (
                   <div key={t}>
                     <div className="drawer-parte mono">{t}</div>
                     {SECCIONES.filter((x) => lista.some(([z]) => z.sec === x.n)).map((x) => (
