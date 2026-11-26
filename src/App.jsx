@@ -16,6 +16,22 @@ const leerHash = () => {
 /** Diapositivas de una parte ('ruta' o 'anexo') con su índice global. */
 const deParte = (p) => SLIDES.map((s, k) => [s, k]).filter(([s]) => s.parte === p);
 const RUTA = deParte('ruta');
+
+const leerTema = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+function useTema() {
+  const [tema, setTema] = useState(leerTema);
+  useEffect(() => {
+    document.documentElement.dataset.theme = tema;
+    try { localStorage.setItem('tema', tema); } catch { /* sin almacenamiento */ }
+  }, [tema]);
+  // La ventana del presentador y la presentación comparten el tema.
+  useEffect(() => {
+    const onStorage = (e) => { if (e.key === 'tema' && e.newValue) setTema(e.newValue === 'dark' ? 'dark' : 'light'); };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+  return [tema, () => setTema((t) => (t === 'dark' ? 'light' : 'dark'))];
+}
 const ANEXO = deParte('anexo');
 
 function Diapositiva({ s, n, dir, ir }) {
@@ -24,7 +40,6 @@ function Diapositiva({ s, n, dir, ir }) {
     <section className={`slide ${s.parte || ''} ${s.layout || ''} ${dir > 0 ? 'in-next' : 'in-prev'}`} aria-roledescription="diapositiva" aria-label={`${n}: ${s.title || ''}`}>
       {s.title && !['cover', 'divisoria', 'end'].includes(s.layout) && (
         <div className="slide-head">
-          {sec && <div className="kicker mono">{sec.code} · {s.kicker || sec.t}</div>}
           <h2>{s.title}</h2>
         </div>
       )}
@@ -52,7 +67,7 @@ function Impresion() {
         <div className="print">
           {SLIDES.map((s, k) => (
             <div className="print-page" key={k}>
-              <div className="print-tag mono">{s.parte === 'ruta' ? 'EXPOSICIÓN' : 'ANEXO'} · {String(k + 1).padStart(2, '0')}</div>
+              <div className="print-tag mono">{s.parte === 'ruta' ? 'EXPOSICIÓN' : 'ANEXO'} · {String(k + 1).padStart(2, '0')}{s.kicker ? ` · ${s.kicker}` : ''}</div>
               <Diapositiva s={s} n={k + 1} dir={1} ir={() => {}} />
             </div>
           ))}
@@ -68,6 +83,7 @@ function Presentacion() {
   const [menu, setMenu] = useState(false);
   const [negro, setNegro] = useState(false);
   const [visor, setVisor] = useState(null); // { ids, index }
+  const [tema, cambiarTema] = useTema();
   const cuerpo = useRef(null);
   const toque = useRef(null);
   const canal = useRef(null);
@@ -99,6 +115,7 @@ function Presentacion() {
 
   // Si una diapositiva no cabe en la pantalla (p. ej. un proyector de 1280x720), se reduce hasta caber,
   // sin bajar del 72 %; por debajo de eso se deja el desplazamiento para no volverla ilegible.
+  // Si sobra espacio, se amplía (hasta 125 %) para que se lea mejor desde el fondo del salón.
   useEffect(() => {
     const ajustar = () => {
       const st = cuerpo.current;
@@ -106,7 +123,14 @@ function Presentacion() {
       if (!sl) return;
       sl.style.zoom = '';
       const sobra = sl.scrollHeight - st.clientHeight;
-      if (sobra > 2) sl.style.zoom = String(Math.max(0.72, st.clientHeight / sl.scrollHeight));
+      if (sobra > 2) { sl.style.zoom = String(Math.max(0.72, st.clientHeight / sl.scrollHeight)); return; }
+      // Los interactivos crecen mientras se usan: no se amplían, para que no se desborden a mitad de la demostración.
+      if (st.clientWidth < 900 || sl.querySelector('.c14, .mx, .saga, .intr')) return;
+      for (const z of [1.25, 1.2, 1.15, 1.1, 1.05]) {
+        sl.style.zoom = String(z);
+        if (st.scrollHeight <= st.clientHeight + 1 && st.scrollWidth <= st.clientWidth + 1) return;
+      }
+      sl.style.zoom = '';
     };
     const tiempos = [0, 120, 650].map((ms) => setTimeout(ajustar, ms));
     window.addEventListener('resize', ajustar);
@@ -123,7 +147,7 @@ function Presentacion() {
       if (e.data?.hola) c.postMessage({ i: leerHash() });
       if (e.data?.negro !== undefined) setNegro((v) => !v);
     };
-    return () => c.close();
+    return () => { c.close(); if (canal.current === c) canal.current = null; };
   }, [ir]);
 
   useEffect(() => {
@@ -156,13 +180,14 @@ function Presentacion() {
         case 'b': case 'B': case '.': setNegro((v) => !v); break;
         case 'p': case 'P': abrirPresentador(); break;
         case 'r': case 'R': ir(RUTA[0][1]); break;
+        case 't': case 'T': cambiarTema(); break;
         default: return;
       }
       e.preventDefault();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [paso, ir, parte, menu, visor, negro]);
+  }, [paso, ir, parte, menu, visor, negro, cambiarTema]);
 
   const abrir = useCallback((id, el) => {
     const slide = el.closest('.slide');
@@ -198,12 +223,17 @@ function Presentacion() {
           {sec && (
             <div className="topbar-sec mono">
               <span className="gate">{sec.code}</span>
-              <span className="sec-name">{sec.t}</span>
+              <span className="sec-name">{sec.t}{s.kicker && <i> / {s.kicker}</i>}</span>
             </div>
           )}
           <div className="topbar-right">
             {!enRuta && <button className="parte-btn mono" onClick={() => ir(RUTA[0][1])} title="Volver a la exposición (R)">ANEXO · volver a la exposición</button>}
             <span className="mono counter">{enRuta ? '' : 'A '}{String(pos + 1).padStart(2, '0')}<i>/{parte.length}</i></span>
+            <button className="icon-btn" onClick={cambiarTema} aria-label={tema === 'dark' ? 'Cambiar a tema claro (T)' : 'Cambiar a tema oscuro (T)'} title={tema === 'dark' ? 'Tema claro (T)' : 'Tema oscuro (T)'}>
+              {tema === 'dark'
+                ? <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+                : <svg viewBox="0 0 24 24" width="18" height="18"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" /></svg>}
+            </button>
             <button className="icon-btn" onClick={abrirPresentador} aria-label="Modo presentador (P)" title="Modo presentador (P)">
               <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 5h18v11H3zM8 20h8M12 16v4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
@@ -267,7 +297,7 @@ function Presentacion() {
                   </div>
                 ))}
               </div>
-              <div className="drawer-keys mono">← → navegar · M índice · R volver a la exposición · P presentador · B pantalla negra · F pantalla completa</div>
+              <div className="drawer-keys mono">← → navegar · M índice · R volver a la exposición · T tema claro/oscuro · P presentador · B pantalla negra · F pantalla completa</div>
             </aside>
           </div>
         )}

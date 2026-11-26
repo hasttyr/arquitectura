@@ -127,7 +127,7 @@ const RUTA = [
           <b>USD 0,7 M</b>
           <span>1.509 M USD por trimestre ÷ 2.208 horas</span>
           <Src t="dato">Avianca, resultados 3T 2025</Src>
-          <p>El reto no es vender: es <b>no apagarlo todo</b> cuando una parte falla.</p>
+          <p>Vender ya saben. Lo difícil es que una falla <b>no apague toda la venta</b>.</p>
         </div>
       </Cols>
     ),

@@ -22,7 +22,7 @@ export default function Presentador({ slides, secciones, canal }) {
     c.current = ch;
     ch.onmessage = (e) => { if (typeof e.data?.i === 'number') setI(e.data.i); };
     ch.postMessage({ hola: true });
-    return () => ch.close();
+    return () => { ch.close(); if (c.current === ch) c.current = null; };
   }, [canal]);
 
   useEffect(() => {

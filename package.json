@@ -11,7 +11,6 @@
     "figuras": "node scripts/copiar-figuras.mjs"
   },
   "dependencies": {
-    "@fontsource-variable/bricolage-grotesque": "^5.2.8",
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "react": "18.3.1",
