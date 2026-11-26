@@ -25,16 +25,19 @@
 /* Divisoria "cambio de puerta" */
 .slide.divisoria { justify-content: center; }
 .puerta { margin: auto; width: min(1100px, 100%); border: 1px solid var(--line2); border-radius: 14px; padding: clamp(22px, 3.5vw, 44px); box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 24px 60px -28px rgba(0,0,0,.55); }
-.puerta-top, .puerta-row { display: grid; grid-template-columns: minmax(120px, 0.6fr) 2.4fr minmax(150px, 0.8fr); gap: clamp(14px, 2vw, 28px); align-items: center; }
+/* La columna de la puerta toma el ancho del código; cabecera y fila la comparten con subgrid. */
+.puerta { display: grid; grid-template-columns: max-content minmax(0, 1fr) minmax(150px, 0.8fr); column-gap: clamp(14px, 2vw, 28px); }
+.puerta > * { grid-column: 1 / -1; }
+.puerta-top, .puerta-row { display: grid; grid-template-columns: subgrid; row-gap: 12px; align-items: center; }
 .puerta-top { font-size: 0.75rem; letter-spacing: .16em; color: var(--dim); padding-bottom: 10px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
 .puerta-code { font-family: var(--display); font-weight: 700; font-size: clamp(3.5rem, 8vw, 6rem); line-height: .9; color: var(--on-signal); background: var(--signal); justify-self: start; padding: 0.08em 0.14em 0.1em; border-radius: 6px; letter-spacing: -0.04em; }
 .puerta-dest { font-family: var(--mono); font-weight: 600; font-size: clamp(1.5rem, 3.4vw, 3.25rem); line-height: 1.1; }
 .puerta-st { color: var(--amber); font-size: clamp(0.875rem, 1.2vw, 1.125rem); letter-spacing: .14em; animation: blink 1.6s steps(2) infinite; }
 .puerta-q { font-family: var(--display); font-size: clamp(1.25rem, 2.1vw, 2rem); line-height: 1.25; margin: clamp(20px, 3.5vh, 36px) 0 0; max-width: 36ch; text-wrap: balance; }
 .puerta-foot { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; padding-top: 14px; border-top: 1px dashed var(--line2); font-size: 0.8125rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
-.flap { display: inline-flex; flex-wrap: wrap; gap: 3px; perspective: 400px; }
+.flap { display: inline-flex; flex-wrap: wrap; gap: 3px 0.4em; perspective: 400px; }
+.flap-w { display: inline-flex; gap: 3px; }
 .flap-c { display: inline-grid; place-items: center; min-width: 0.78em; padding: 0.06em 0.04em; background: linear-gradient(180deg, #252523 0 49%, #1c1c1a 51% 100%); border-radius: 4px; color: var(--ink); animation: flip .5s cubic-bezier(.3,.7,.3,1) both; }
-.flap-c.sp { background: none; min-width: 0.4em; }
 @keyframes flip { 0% { transform: rotateX(90deg); color: transparent; } 60% { transform: rotateX(-12deg); } 100% { transform: rotateX(0); } }
 
 /* Falla y cifra */
@@ -205,6 +208,7 @@ body:has(.print) { overflow: auto; }
 @media (max-width: 860px) {
   .c14, .mx, .intr { grid-template-columns: 1fr; }
   .kpis { grid-template-columns: 1fr 1fr; }
+  .puerta { grid-template-columns: minmax(0, 1fr); }
   .puerta-top, .puerta-row { grid-template-columns: 1fr; }
   .saga-log { grid-template-columns: 1fr; }
   .board-row.intr-row { grid-template-columns: 34px 1fr 90px; }

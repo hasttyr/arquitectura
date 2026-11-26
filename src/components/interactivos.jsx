@@ -21,10 +21,17 @@ export const Src = ({ t, children }) => {
 
 /* ───────────────────────── Divisoria "cambio de puerta" ───────────────────────── */
 function Flap({ texto, desde = 0 }) {
+  // Las letras se agrupan por palabra para que el tablero corte entre palabras, no dentro de una.
+  let k = 0;
   return (
     <span className="flap" aria-label={texto}>
-      {[...texto].map((c, k) => (
-        <span key={k} className={`flap-c${c === ' ' ? ' sp' : ''}`} style={{ animationDelay: `${desde + k * 32}ms` }} aria-hidden="true">{c === ' ' ? ' ' : c}</span>
+      {texto.split(' ').map((palabra, p) => (
+        <span key={p} className="flap-w" aria-hidden="true">
+          {[...palabra].map((c) => {
+            const d = desde + k++ * 32;
+            return <span key={d} className="flap-c" style={{ animationDelay: `${d}ms` }}>{c}</span>;
+          })}
+        </span>
       ))}
     </span>
   );
