@@ -69,7 +69,6 @@ export const ANEXO = [
             <div><span>VISTAS</span>Rozanski &amp; Woods</div>
             <div><span>EA</span>TOGAF</div>
             <div className="barcode" aria-hidden="true" />
-            <div className="dim">Pulse → para embarcar</div>
           </div>
         </div>
       </div>
@@ -164,7 +163,7 @@ export const ANEXO = [
           ['Proveedores sin contingencia', 'Notificaciones por WhatsApp y correo caídas por la falla global de Azure (oct. 2025) [8].', 'Notificaciones asíncronas que esperan en Kafka (clase C) y recuperación regional propia (14.1.4).'],
           ['Cambio de distribución', 'Venta de agencias concentrada en EDIFACT; NDC de terceros suspendido (dic. 2025) [9].', 'Capa de Integración con modelo canónico que soporta ambos protocolos (6.3.1).'],
         ]} />
-        <p className="note">Varias de esas fallas fueron decisiones operativas o coincidieron con la pandemia y problemas de liquidez, que ninguna arquitectura resuelve. Lo que sí está a su alcance es lo que muestran: <b>no había canales trazables para reclamar</b> y el negocio solo tenía <b>un interruptor global de venta</b>.</p>
+        <p className="note">Varias de esas fallas fueron decisiones operativas o coincidieron con la pandemia y problemas de liquidez, y eso no lo resuelve una arquitectura. Lo que sí puede resolver es lo que dejaron ver: <b>no había canales trazables para reclamar</b> y la venta dependía de <b>un solo interruptor global</b>.</p>
       </>
     ),
   },
@@ -830,7 +829,7 @@ export const ANEXO = [
       <Cols r="1fr 1fr">
         <div>
           <Lead>El pago en dinero se sustituye por tres comandos: <K>BloquearMillas</K>, <K>ConfirmarRedencion</K> y <K>LiberarMillas</K>.</Lead>
-          <p>La redención <b>no es degradable</b>: si <K>MillasBloqueadas</K> no llega tras los reenvíos, la reserva falla y se publica <K>LiberarMillas</K>, que es idempotente y no tiene efecto si el bloqueo nunca se aplicó. No se compromete un saldo sin certeza.</p>
+          <p>La redención <b>no es degradable</b>: si <K>MillasBloqueadas</K> no llega tras los reenvíos, la reserva falla y se publica <K>LiberarMillas</K>, que es idempotente y no tiene efecto si el bloqueo nunca se aplicó.</p>
           <p className="muted">Cada operación es un movimiento con clave de idempotencia; el saldo se actualiza con control de versión. No se combina con dinero en una misma reserva.</p>
         </div>
         <Fig id="15" />
@@ -1806,7 +1805,7 @@ export const ANEXO = [
       <div className="end">
         <div className="mono dim">VUELO COMPLETADO · ATERRIZAJE EN HORARIO</div>
         <h2 className="end-t">¡Gracias!</h2>
-        <p className="end-sub">El asiento 14C tiene un solo dueño, y ninguna falla vuelve a apagar toda la venta. Gracias por su atención.</p>
+        <p className="end-sub">El asiento 14C se vende una sola vez y una falla ya no apaga toda la venta.</p>
         <div className="refs">
           <b className="mono">REFERENCIAS PRINCIPALES</b>
           <span>Rozanski y Woods (2009). <i>Software Systems Architecture</i>. Addison-Wesley.</span>

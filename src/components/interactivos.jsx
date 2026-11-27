@@ -210,7 +210,7 @@ export function MatrizInteractiva() {
         {!visible ? (
           <div className="mx-voto">
             <span className="mono dim">ANTES DE VER EL RESULTADO</span>
-            <p>¿Quién gana? Mano arriba: <b>A</b>, <b>B</b> o <b>C</b>.</p>
+            <p>¿Cuál gana: <b>A</b>, <b>B</b> o <b>C</b>?</p>
             <button className="cta" onClick={() => setVisible(true)}>Revelar</button>
           </div>
         ) : (
@@ -221,7 +221,7 @@ export function MatrizInteractiva() {
                 <div className="bar-t"><span style={{ width: `${v * 10}%` }} /></div>
               </div>
             ))}
-            <p className="muted">Mueva los pesos: B gana o empata salvo que la complejidad operativa pese mucho. Por eso la operación es el principal <b>riesgo aceptado</b>.</p>
+            <p className="muted">B gana o empata salvo que la complejidad operativa pese mucho. Por eso la operación es el principal <b>riesgo aceptado</b>.</p>
           </div>
         )}
       </div>
@@ -347,7 +347,7 @@ export function Interruptores() {
   return (
     <div className="intr">
       <div className="intr-sw">
-        <span className="mono dim">PROVOQUE UNA FALLA</span>
+        <span className="mono dim">FALLAS SIMULADAS</span>
         {FALLAS.map(([k, n]) => (
           <button key={k} role="switch" aria-checked={!!on[k]} className={`sw${on[k] ? ' on' : ''}`} onClick={() => t(k)}>
             <span className="sw-t" aria-hidden="true"><span /></span>{n}
