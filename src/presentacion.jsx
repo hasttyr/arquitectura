@@ -74,10 +74,10 @@ function MapaAD({ ir, slides }) {
           <section key={g} className="mapa-g">
             <div className="mapa-h"><b>{g}</b><span className="mono">{marco}</span></div>
             {items.map(([t, d, destino]) => {
-              const [k, hoy] = donde(destino);
+              const [k] = donde(destino);
               return (
               <button key={t} className="mapa-i" onClick={() => k >= 0 && ir(k)} title={`Ir a: ${destino}`}>
-                <span className="mapa-t">{t}<i className={`mono ${hoy ? 'hoy' : ''}`}>{hoy ? 'HOY' : 'ANEXO'}</i></span>
+                <span className="mapa-t">{t}</span>
                 <span className="mapa-d">{d}</span>
               </button>
               );
@@ -85,7 +85,7 @@ function MapaAD({ ir, slides }) {
           </section>
         ))}
       </div>
-      <p className="note center">Documento completo: <b>36 figuras, 39 tablas y 61 referencias</b>. Lo marcado <b className="hi">HOY</b> se expone; las tablas de respaldo están en el anexo.</p>
+      <p className="note center">Documento completo: <b>36 figuras, 39 tablas y 61 referencias</b>.</p>
     </>
   );
 }
